@@ -21,7 +21,20 @@
  *  * Unauthorised changes to this file are prohibited.
  *  *
  *  * @author Ryan Wood
- *  @since 23/7/2019
+ *  @since 18/8/2019
+ */
+
+/*
+ *
+ *  *
+ *  * © Stelch Software 2019, distribution is strictly prohibited
+ *  * Blockcade is a company of Stelch Software
+ *  *
+ *  * Changes to this file must be documented on push.
+ *  * Unauthorised changes to this file are prohibited.
+ *  *
+ *  * @author Ryan Wood
+ *  @since 18/8/2019
  */
 
 package net.blockcade.Arcade.games.BedBattles.Events;
@@ -56,7 +69,7 @@ public class BlockBreakEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void BlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
-        if ((e.getBlock().getType().equals(Material.RED_BED) || e.getBlock().getType().equals(Material.LEGACY_BED_BLOCK)))
+        if (!(e.getBlock().getType().name().toUpperCase().contains("BED")))
             return;
         if (Main.beds.containsKey(e.getBlock())) {
             e.setCancelled(true);

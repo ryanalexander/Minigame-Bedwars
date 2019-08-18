@@ -21,6 +21,32 @@
  *  * Unauthorised changes to this file are prohibited.
  *  *
  *  * @author Ryan Wood
+ *  @since 18/8/2019
+ */
+
+/*
+ *
+ *  *
+ *  * © Stelch Software 2019, distribution is strictly prohibited
+ *  * Blockcade is a company of Stelch Software
+ *  *
+ *  * Changes to this file must be documented on push.
+ *  * Unauthorised changes to this file are prohibited.
+ *  *
+ *  * @author Ryan Wood
+ *  @since 18/8/2019
+ */
+
+/*
+ *
+ *  *
+ *  * © Stelch Software 2019, distribution is strictly prohibited
+ *  * Blockcade is a company of Stelch Software
+ *  *
+ *  * Changes to this file must be documented on push.
+ *  * Unauthorised changes to this file are prohibited.
+ *  *
+ *  * @author Ryan Wood
  *  @since 23/7/2019
  */
 
@@ -51,8 +77,8 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 
+import static org.bukkit.Material.GHAST_SPAWN_EGG;
 import static org.bukkit.Material.GOLD_INGOT;
-import static org.bukkit.Material.MAGMA_CUBE_SPAWN_EGG;
 
 public class eggs implements Listener {
 
@@ -74,25 +100,26 @@ public class eggs implements Listener {
         });
 
 
-        Item MAGMA_CUBE_SPAWN = new Item(MAGMA_CUBE_SPAWN_EGG, "&bLava Minion");
-        MAGMA_CUBE_SPAWN.setLore(new String[]{
+        Item IRON_GOLEM_SPAWN = new Item(GHAST_SPAWN_EGG, "&bIsland Bouncer");
+        IRON_GOLEM_SPAWN.setLore(new String[]{
                 "&r",
                 "&7Cost: &630 Gold",
                 "&r",
-                "&aDuration: &6120 Secs"
+                "&7Spawns: &aIron Golem",
+                "&7Duration: &6120 Secs"
         });
-        MAGMA_CUBE_SPAWN.setAmount(1);
-        MAGMA_CUBE_SPAWN.setOnClick(new Item.click() {
+        IRON_GOLEM_SPAWN.setAmount(1);
+        IRON_GOLEM_SPAWN.setOnClick(new Item.click() {
             public void run(Player p) {
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 30)) {
-                    MAGMA_CUBE_SPAWN.setLore(new String[]{String.format("&aYou are tha sneaky mayn")});
-                    p.getInventory().addItem(MAGMA_CUBE_SPAWN.spigot());
+                    IRON_GOLEM_SPAWN.setLore(new String[]{String.format("&aYou are tha sneaky mayn")});
+                    p.getInventory().addItem(IRON_GOLEM_SPAWN.spigot());
                 }
             }
         });
 
         eggs.shop.setItem(0, close.spigot());
-        eggs.shop.setItem(19, MAGMA_CUBE_SPAWN.spigot());
+        eggs.shop.setItem(19, IRON_GOLEM_SPAWN.spigot());
 
         eggs.menus.add(eggs.shop);
         return eggs.shop;

@@ -21,7 +21,20 @@
  *  * Unauthorised changes to this file are prohibited.
  *  *
  *  * @author Ryan Wood
- *  @since 23/7/2019
+ *  @since 18/8/2019
+ */
+
+/*
+ *
+ *  *
+ *  * © Stelch Software 2019, distribution is strictly prohibited
+ *  * Blockcade is a company of Stelch Software
+ *  *
+ *  * Changes to this file must be documented on push.
+ *  * Unauthorised changes to this file are prohibited.
+ *  *
+ *  * @author Ryan Wood
+ *  @since 18/8/2019
  */
 
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
@@ -36,7 +49,7 @@ import org.bukkit.inventory.ItemStack;
 public class header {
 
     public static Inventory format(Game game, Inventory inv, boolean header) {
-        ItemStack placeholder = new Item(Material.BLACK_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
+        ItemStack placeholder = new Item(Material.WHITE_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
             @Override
             public void run(Player param1Player) {
 
