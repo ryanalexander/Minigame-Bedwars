@@ -1,0 +1,10 @@
+name: BedBattles
+main: net.blockcade.Arcade.games.BedBattles.Main
+description: Addition to GameCore
+version: 1.0
+api-version: 1.13
+depend:
+  - Arcade
+commands:
+  game:
+    description: A command
