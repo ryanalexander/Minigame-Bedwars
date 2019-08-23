@@ -28,8 +28,12 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Main;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -142,10 +146,21 @@ public class Forge {
                     cancel();
                     return;
                 }
-                drop();
+
+                if(getEntitiesAroundPoint(location,2,new ItemStack(material))<4)drop();
                 Forge.this.run();
             }
         }.runTaskLater(Main.getPlugin(Main.class), this.speed);
+    }
+
+    private static Integer getEntitiesAroundPoint(Location location, double radius, ItemStack type) {
+        int count = 0;
+        for (Entity e : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
+            if (e instanceof Item) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void drop() {

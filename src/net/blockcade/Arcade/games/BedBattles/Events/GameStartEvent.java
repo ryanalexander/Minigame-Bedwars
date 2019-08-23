@@ -11,19 +11,6 @@
  *  @since 18/8/2019
  */
 
-/*
- *
- *  *
- *  * © Stelch Software 2019, distribution is strictly prohibited
- *  * Blockcade is a company of Stelch Software
- *  *
- *  * Changes to this file must be documented on push.
- *  * Unauthorised changes to this file are prohibited.
- *  *
- *  * @author Ryan Wood
- *  @since 23/7/2019
- */
-
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
@@ -83,7 +70,6 @@ public class GameStartEvent implements Listener {
                 public void run() {
                     for (Player player : game.TeamManager().getTeamPlayers(team)) {
                         if (!player.isOnline()) cancel();
-                        player.getEnderChest().clear();
                         sm.update();
                         sm.showFor(player);
                     }
@@ -131,42 +117,32 @@ public class GameStartEvent implements Listener {
                 }
             });
 
+            Block bed = game.TeamManager().getConfigLocation("bed", team).getBlock();
+            BlockFace direction = JavaUtils.direction((float)game.TeamManager().getConfigInt("bed.yaw", team));
+            bed.setType(Material.RED_BED);
+            Bed blockData = (Bed) bed.getBlockData();
+            blockData.setPart(Bed.Part.FOOT);
+            blockData.setFacing(direction);
+            bed.setBlockData(blockData);
 
-            // Spawn team bed
-            Location bed = game.TeamManager().getConfigLocation("bed", team);
-            Location bed1 = game.TeamManager().getConfigLocation("bed_bottom", team);
-            Block bed_ = bed.getBlock();
-            Block bed1_ = bed1.getBlock();
-            bed_.setType(Material.RED_BED);
-            //bed_.setType(Material.valueOf(team.getTranslation()+"_BED"));
-            bed1_.setType(Material.RED_BED);
-            //bed1_.setType(Material.valueOf(team.getTranslation()+"_BED"));
-            try {
-                bed_.setType(Material.RED_BED);
-                ((Directional) bed_.getBlockData()).setFacing(BlockFace.EAST);
-                bed1_.setType(Material.RED_BED);
-                Bed bbed_ = (Bed) bed_.getBlockData();
-                Bed bbed1_ = (Bed) bed1_.getBlockData();
-                ((Directional) bed1_.getBlockData()).setFacing(BlockFace.WEST);
-                bbed_.setPart(Bed.Part.FOOT);
-                bbed1_.setPart(Bed.Part.HEAD);
-                bed_.setBlockData(bbed_);
-                bed1_.setBlockData(bbed1_);
-                teamb.setBed(bed_);
-                Main.beds.put(bed_, teamb);
-                game.BlockManager().update(bed, Material.RED_BED, null);
-                game.BlockManager().update(bed1, Material.RED_BED, null);
+            org.bukkit.block.Block relative = bed.getRelative(direction);
+            relative.setType(Material.RED_BED, false);
+            Bed relativeBlockData = (Bed) relative.getBlockData();
+            relativeBlockData.setPart(Bed.Part.HEAD);
+            relativeBlockData.setFacing(direction);
+            relative.setBlockData(relativeBlockData);
 
-                game.BlockManager().blocklog.add(bed);
-                game.BlockManager().blocklog.add(bed1);
-            } catch (Exception ex) {
-                Bukkit.broadcastMessage(Text.format("&cA game exception has occurred. Check logs for details."));
-                ex.printStackTrace();
-            }
+            game.BlockManager().update(bed.getLocation(),Material.AIR,null);
+            game.BlockManager().update(relative.getLocation(),Material.AIR,null);
+
+            teamb.setBed(bed);
+
+            Main.beds.put(bed,teamb);
+
 
             // Create Forges
-            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (3 * 20), true);
-            Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (10 * 20), true);
+            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (1 * 20), true);
+            Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (5 * 20), true);
 
             teamb.setIron_forge(iron_forge);
             teamb.setGold_forge(gold_forge);
@@ -200,5 +176,6 @@ public class GameStartEvent implements Listener {
         }
 
     }
+
 
 }
