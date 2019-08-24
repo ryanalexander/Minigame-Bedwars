@@ -30,7 +30,9 @@ import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Utils.Item;
 import net.blockcade.Arcade.Utils.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
+import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.traps;
 import net.blockcade.Arcade.games.BedBattles.Main;
+import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Variables.RomanNumerals;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import net.blockcade.Arcade.games.BedBattles.Variables.armor_level;
@@ -176,12 +178,43 @@ public class team_shop implements Listener {
                 }
             }
         });
+        BedTeam bedTeam = Main.teams.get(team);
+        int trapCount = bedTeam.traps.size();
+
+        Item trap_1 = new Item((trapCount>=1?bedTeam.getTrap(0).getItem():Material.RED_STAINED_GLASS_PANE),trapCount>=1?bedTeam.getTrap(0).getName():"&cNo trap set");
+        Item trap_2 = new Item((trapCount>=2?bedTeam.getTrap(1).getItem():Material.RED_STAINED_GLASS_PANE),trapCount>=2?bedTeam.getTrap(1).getName():"&cNo trap set");
+        Item trap_3 = new Item((trapCount>=3?bedTeam.getTrap(2).getItem():Material.RED_STAINED_GLASS_PANE),trapCount>=3?bedTeam.getTrap(2).getName():"&cNo trap set");
+
+        trap_1.setOnClick(new Item.click() {
+            @Override
+            public void run(Player p) {
+                if(bedTeam.traps.size()>=1){return;}
+                p.openInventory(traps.getShop(game,p));
+            }
+        });
+        trap_2.setOnClick(new Item.click() {
+            @Override
+            public void run(Player p) {
+                if(bedTeam.traps.size()>=2){return;}
+                p.openInventory(traps.getShop(game,p));
+            }
+        });
+        trap_3.setOnClick(new Item.click() {
+            @Override
+            public void run(Player p) {
+                if(bedTeam.traps.size()>=3){return;}
+                p.openInventory(traps.getShop(game,p));
+            }
+        });
 
         this.shop.setItem(10, sharp_swords.spigot());
         this.shop.setItem(11, reinforced_armor.spigot());
         this.shop.setItem(12, ManiacMiner.spigot());
         this.shop.setItem(13, forge.spigot());
         this.shop.setItem(14, healing.spigot());
+        this.shop.setItem(30, trap_1.spigot());
+        this.shop.setItem(31, trap_2.spigot());
+        this.shop.setItem(32, trap_3.spigot());
 
         this.menus.add(this.shop);
         return this.shop;

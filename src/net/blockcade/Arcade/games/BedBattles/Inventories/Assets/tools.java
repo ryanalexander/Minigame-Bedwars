@@ -46,6 +46,7 @@ import net.blockcade.Arcade.Utils.Item;
 import net.blockcade.Arcade.Utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -105,7 +106,9 @@ public class tools implements Listener {
                         if (last != null) {
                             p.getInventory().remove(last);
                         }
-                        p.getInventory().addItem(new ItemStack(next));
+                            ItemStack is = new ItemStack(next, 1);
+                            is.addEnchantment(Enchantment.DIG_SPEED,1);
+                        p.getInventory().addItem(new ItemStack(is));
                         p.openInventory(tools.getShop(game, p));
                     }
                 }
@@ -128,7 +131,9 @@ public class tools implements Listener {
                         if (last != null) {
                             p.getInventory().remove(last);
                         }
-                        p.getInventory().addItem(new ItemStack(next));
+                        ItemStack is = new ItemStack(next, 1);
+                        is.addEnchantment(Enchantment.DIG_SPEED,1);
+                        p.getInventory().addItem(new ItemStack(is));
                         p.openInventory(tools.getShop(game, p));
                     }
                 }
@@ -151,7 +156,9 @@ public class tools implements Listener {
                         if (last != null) {
                             p.getInventory().remove(last);
                         }
-                        p.getInventory().addItem(new ItemStack(next));
+                        ItemStack is = new ItemStack(next, 1);
+                        is.addEnchantment(Enchantment.DIG_SPEED,1);
+                        p.getInventory().addItem(new ItemStack(is));
                         p.openInventory(tools.getShop(game, p));
                     }
                 }

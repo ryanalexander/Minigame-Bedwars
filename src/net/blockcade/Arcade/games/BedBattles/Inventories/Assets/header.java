@@ -49,7 +49,7 @@ import org.bukkit.inventory.ItemStack;
 public class header {
 
     public static Inventory format(Game game, Inventory inv, boolean header) {
-        ItemStack placeholder = new Item(Material.WHITE_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
+        ItemStack placeholder = new Item(Material.LIGHT_GRAY_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
             @Override
             public void run(Player param1Player) {
 

@@ -28,9 +28,11 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Varables.TeamColors;
+import net.blockcade.Arcade.games.BedBattles.Variables.TeamTraps;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.block.Block;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BedTeam {
@@ -39,6 +41,7 @@ public class BedTeam {
     private TeamColors team;
 
     public HashMap<TeamUpgrades, Integer> upgrades = new HashMap<>();
+    public ArrayList<TeamTraps> traps = new ArrayList<>();
 
     Forge iron_forge;
     Forge gold_forge;
@@ -83,6 +86,19 @@ public class BedTeam {
     public Forge getEmerald_forge() {
         return this.emerald_forge;
     }
+
+    public ArrayList<TeamTraps> getTraps() {
+        return traps;
+    }
+
+    public void setTraps(ArrayList<TeamTraps> traps) {
+        this.traps = traps;
+    }
+    public void addTrap(TeamTraps trap){this.traps.add(trap);}
+    public void removeTrap(TeamTraps trap){this.traps.remove(trap);}
+    public void removeTrap(){this.traps.remove(0);}
+    public TeamTraps getTrap(){return this.traps.get(0);}
+    public TeamTraps getTrap(int i){return this.traps.get(i);}
 
     public TeamColors getTeam() {
         return this.team;

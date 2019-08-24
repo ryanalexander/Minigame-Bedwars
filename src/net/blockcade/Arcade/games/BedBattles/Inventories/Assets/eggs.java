@@ -74,11 +74,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-import static org.bukkit.Material.GHAST_SPAWN_EGG;
-import static org.bukkit.Material.GOLD_INGOT;
+import static org.bukkit.Material.*;
 
 public class eggs implements Listener {
 
@@ -99,6 +100,27 @@ public class eggs implements Listener {
             }
         });
 
+        Item SILVER_FISH_SPAWN = new Item(SILVERFISH_SPAWN_EGG,"&cLittle white fucker");
+        SILVER_FISH_SPAWN.setLore(new String[]{
+                "",
+                "&7Cost: &f40 Iron",
+                "",
+                "&7Spawns: &aSilverfish",
+                "&7Duration: &615 Seconds"
+        });
+        SILVER_FISH_SPAWN.setAmount(1);
+        SILVER_FISH_SPAWN.setOnClick(new Item.click() {
+            @Override
+            public void run(Player p) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, IRON_INGOT, 40)) {
+                    ItemStack is = new ItemStack(SILVERFISH_SPAWN_EGG);
+                    ItemMeta im = is.getItemMeta();
+                    im.setDisplayName(Text.format("&fLittle white fucker"));
+                    is.setItemMeta(im);
+                    p.getInventory().addItem(is);
+                }
+            }
+        });
 
         Item IRON_GOLEM_SPAWN = new Item(GHAST_SPAWN_EGG, "&bIsland Bouncer");
         IRON_GOLEM_SPAWN.setLore(new String[]{
@@ -120,6 +142,7 @@ public class eggs implements Listener {
 
         eggs.shop.setItem(0, close.spigot());
         eggs.shop.setItem(19, IRON_GOLEM_SPAWN.spigot());
+        eggs.shop.setItem(20, SILVER_FISH_SPAWN.spigot());
 
         eggs.menus.add(eggs.shop);
         return eggs.shop;

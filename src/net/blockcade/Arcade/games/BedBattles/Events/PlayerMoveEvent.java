@@ -27,13 +27,21 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Utils.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
+import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.Map;
 
 public class PlayerMoveEvent implements Listener {
 
@@ -48,13 +56,57 @@ public class PlayerMoveEvent implements Listener {
         if (!game.TeamManager().hasTeam(e.getPlayer())) return;
         TeamColors team = game.TeamManager().getTeam(e.getPlayer());
 
-        if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) && (Main.teams.get(team).getBed().getLocation().distanceSquared(e.getTo()) < 300)) {
-            if (!(e.getPlayer().hasPotionEffect(PotionEffectType.HEAL)))
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 99999, 1));
-        } else {
-            if ((e.getPlayer().hasPotionEffect(PotionEffectType.HEAL)))
-                e.getPlayer().removePotionEffect(PotionEffectType.HEAL);
+
+        BedTeam closest = closestBed(e.getTo());
+        if(!(closest.getTeam().equals(team))&&closest.traps.size()>0){
+            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<350)){
+                switch (closest.getTrap()){
+                    case ALERT:
+
+                        break;
+                    case BLINDNESS:
+                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,6,1,false),false);
+                        break;
+                    default:
+                        System.out.println("Unknown trap exception "+closest.getTrap());
+                }
+                Text.sendMessage(e.getPlayer(),"&c&lTrap Triggered", Text.MessageType.TITLE);
+                for(Player player : game.TeamManager().getTeamPlayers(closest.getTeam())){
+                    Text.sendMessage(player,"&c&lTrap Triggered", Text.MessageType.TITLE);
+                    Text.sendMessage(player,"&e"+closest.getTrap().getName()+"&f has been triggered", Text.MessageType.SUBTITLE);
+                }
+                closest.removeTrap();
+            }
         }
+
+        if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) && (Main.teams.get(team).getBed().getLocation().distanceSquared(e.getTo()) < 300)) {
+            if (!(e.getPlayer().hasPotionEffect(PotionEffectType.REGENERATION)))
+                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 1));
+        } else {
+            if ((e.getPlayer().hasPotionEffect(PotionEffectType.REGENERATION)))
+                e.getPlayer().removePotionEffect(PotionEffectType.REGENERATION);
+        }
+    }
+
+    private BedTeam closestBed(Location location){
+        Location l = null;
+        BedTeam team = null;
+        double distance = 0;
+        for(Map.Entry<Block,BedTeam> payload :  Main.beds.entrySet()) {
+            if(l!=null){
+                Location loc = payload.getKey().getLocation();
+                if(distance<loc.distanceSquared(location)){
+                    l=loc;
+                    distance=loc.distanceSquared(location);
+                    team=payload.getValue();
+                }
+            }else {
+                team=payload.getValue();
+                l=payload.getKey().getLocation();
+                distance=location.distanceSquared(l);
+            }
+        }
+        return team;
     }
 
 }
