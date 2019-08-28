@@ -27,6 +27,7 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Utils.Spectator;
 import net.blockcade.Arcade.Utils.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
@@ -58,19 +59,21 @@ public class PlayerMoveEvent implements Listener {
 
 
         BedTeam closest = closestBed(e.getTo());
-        if(!(closest.getTeam().equals(team))&&closest.traps.size()>0){
-            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<350)){
+        if(!(closest.getTeam().equals(team))&&closest.traps.size()>0&& (!Spectator.isSpectator(e.getPlayer()))){
+            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<400)){
                 switch (closest.getTrap()){
                     case ALERT:
-
+                        e.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
                         break;
                     case BLINDNESS:
-                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,6,1,false),false);
+                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,140,2),true);
+                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,140,2),true);
                         break;
                     default:
                         System.out.println("Unknown trap exception "+closest.getTrap());
                 }
                 Text.sendMessage(e.getPlayer(),"&c&lTrap Triggered", Text.MessageType.TITLE);
+                Text.sendMessage(e.getPlayer(),"&fYou have triggered &e"+closest.getTrap().getName()+"&f!!", Text.MessageType.SUBTITLE);
                 for(Player player : game.TeamManager().getTeamPlayers(closest.getTeam())){
                     Text.sendMessage(player,"&c&lTrap Triggered", Text.MessageType.TITLE);
                     Text.sendMessage(player,"&e"+closest.getTrap().getName()+"&f has been triggered", Text.MessageType.SUBTITLE);
@@ -95,7 +98,7 @@ public class PlayerMoveEvent implements Listener {
         for(Map.Entry<Block,BedTeam> payload :  Main.beds.entrySet()) {
             if(l!=null){
                 Location loc = payload.getKey().getLocation();
-                if(distance<loc.distanceSquared(location)){
+                if(distance>loc.distanceSquared(location)){
                     l=loc;
                     distance=loc.distanceSquared(location);
                     team=payload.getValue();
