@@ -44,6 +44,7 @@ public class Forge {
     private Material material;
     private Game game;
     private boolean stopped = false;
+    private int max_material=0;
     private int amount;
     private long speed;
 
@@ -53,10 +54,11 @@ public class Forge {
      * @param material Bukkit material that should drop
      * @param speed    How many ticks should pass between each drop
      */
-    public Forge(Game game, Location location, Material material, long speed, boolean hasSummary) {
+    public Forge(Game game, Location location, Material material, long speed, boolean hasSummary, int max_material) {
         this.location = location;
         this.material = material;
         this.amount = 1;
+        this.max_material = max_material;
         this.speed = speed;
         this.run();
     }
@@ -147,7 +149,7 @@ public class Forge {
                     return;
                 }
 
-                if(getEntitiesAroundPoint(location,2,new ItemStack(material))<4)drop();
+                if(getEntitiesAroundPoint(location,4,new ItemStack(material))<=max_material)drop();
                 Forge.this.run();
             }
         }.runTaskLater(Main.getPlugin(Main.class), this.speed);
@@ -157,7 +159,8 @@ public class Forge {
         int count = 0;
         for (Entity e : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
             if (e instanceof Item) {
-                count++;
+                if(((Item)e).getItemStack().equals(type))
+                    count++;
             }
         }
         return count;

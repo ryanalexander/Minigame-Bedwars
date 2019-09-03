@@ -141,8 +141,8 @@ public class GameStartEvent implements Listener {
 
 
             // Create Forges
-            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (1 * 20), true);
-            Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (5 * 20), true);
+            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (1 * 20), true,50);
+            Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (5 * 20), true,30);
 
             teamb.setIron_forge(iron_forge);
             teamb.setGold_forge(gold_forge);
@@ -163,16 +163,16 @@ public class GameStartEvent implements Listener {
         for (String raw_loc : diamond_locations) {
             String[] loc_data = raw_loc.split("[:]");
             Location pos = new Location(Bukkit.getWorld(loc_data[0]), Double.parseDouble(loc_data[1]), Double.parseDouble(loc_data[2]), Double.parseDouble(loc_data[3]));
-            Forge forge = new Forge(game, pos, Material.DIAMOND, (10 * 20), false);
-            forge.setSpinningBlock(new SpinningBlock(pos.add(0, 2, 0), Material.DIAMOND_BLOCK, 0, "&b&lDiamond Generator"));
+            Forge forge = new Forge(game, pos, Material.DIAMOND, (10 * 20), false,4);
+            forge.setSpinningBlock(new SpinningBlock(pos.add(0, 1.5, 0), Material.DIAMOND_BLOCK, 0, "&b&lDiamond Generator"));
         }
         // Spawn Emerald Forges
         List<String> emerald_locations = game.handler().getConfig().getStringList(String.format("maps.%s.EMERALD_FORGE", game.map().getName()));
         for (String raw_loc : emerald_locations) {
             String[] loc_data = raw_loc.split("[:]");
             Location pos = new Location(Bukkit.getWorld(loc_data[0]), Double.parseDouble(loc_data[1]), Double.parseDouble(loc_data[2]), Double.parseDouble(loc_data[3]));
-            Forge forge = new Forge(game, pos, Material.EMERALD, (20 * 20), false);
-            forge.setSpinningBlock(new SpinningBlock(pos.add(0, 2, 0), Material.EMERALD_BLOCK, 0, "&a&lEmerald Generator"));
+            Forge forge = new Forge(game, pos, Material.EMERALD, (20 * 20), false,2);
+            forge.setSpinningBlock(new SpinningBlock(pos.add(0, 1.5, 0), Material.EMERALD_BLOCK, 0, "&a&lEmerald Generator"));
         }
 
     }

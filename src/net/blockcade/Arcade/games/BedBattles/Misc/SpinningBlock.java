@@ -73,7 +73,7 @@ public class SpinningBlock {
         this.e.teleport(this.e.getLocation());
         this.e.setCanPickupItems(false);
         this.e.setRemoveWhenFarAway(false);
-        this.e.setMarker(true);
+        this.e.setMarker(false);
         this.e.getEquipment().setHelmet(skull);
         this.e.setCustomName(Text.format(text));
         this.e.setCustomNameVisible(true);
