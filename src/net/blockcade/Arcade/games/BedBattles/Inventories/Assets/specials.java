@@ -152,14 +152,30 @@ public class specials implements Listener {
             }
         });
 
+        Item ender_chest = new Item(ENDER_CHEST, "&dPortable Enderchest");
+        ender_chest.setLore(new String[]{
+                "&r",
+                "&7Cost: &624 Gold",
+                "&r",
+                "&c&lONE USE"
+        });
+        ender_chest.setAmount(1);
+        ender_chest.setOnClick(new Item.click() {
+            public void run(Player p) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 24))
+                    p.getInventory().addItem(new ItemStack(ENDER_CHEST, 1));
+            }
+        });
+
 
         specials.shop.setItem(0, close.spigot());
         specials.shop.setItem(19, tnt.spigot());
         specials.shop.setItem(20, epearl.spigot());
         specials.shop.setItem(21, water.spigot());
-        //specials.shop.setItem(22,fireball.spigot());
+        specials.shop.setItem(22,fireball.spigot());
         //specials.shop.setItem(23, bridge_egg.spigot());
         specials.shop.setItem(24, golden_apple.spigot());
+        specials.shop.setItem(28, ender_chest.spigot());
         return specials.shop;
     }
 }

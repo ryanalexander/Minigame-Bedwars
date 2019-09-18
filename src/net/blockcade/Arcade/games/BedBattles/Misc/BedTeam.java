@@ -27,10 +27,14 @@
 package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Utils.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamTraps;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +47,8 @@ public class BedTeam {
     public HashMap<TeamUpgrades, Integer> upgrades = new HashMap<>();
     public ArrayList<TeamTraps> traps = new ArrayList<>();
 
+    public Inventory Enderchest;
+
     Forge iron_forge;
     Forge gold_forge;
     Forge emerald_forge;
@@ -53,6 +59,7 @@ public class BedTeam {
     public BedTeam(Game game, TeamColors team) {
         this.game = game;
         this.team = team;
+        this.Enderchest= Bukkit.getServer().createInventory(null, InventoryType.CHEST, Text.format(team.formatted()+"&7's Enderchest"));
     }
 
     public Block getBed() {
@@ -85,6 +92,10 @@ public class BedTeam {
 
     public Forge getEmerald_forge() {
         return this.emerald_forge;
+    }
+
+    public Inventory getEnderchest() {
+        return Enderchest;
     }
 
     public ArrayList<TeamTraps> getTraps() {

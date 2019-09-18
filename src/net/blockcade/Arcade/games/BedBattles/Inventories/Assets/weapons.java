@@ -69,7 +69,7 @@ public class weapons implements Listener {
     // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
 
     public static Inventory getShop(Game game, Player player) {
-        weapons.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully's blocks")), false);
+        weapons.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully's weapons")), false);
         TeamColors team = game.TeamManager().getTeam(player);
 
         Item close = new Item(Material.BARRIER, "&cBack");

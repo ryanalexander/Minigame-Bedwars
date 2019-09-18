@@ -60,6 +60,7 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new GameRegisterEvent(), this);
         pm.registerEvents(new PlayerRespawnEvent(game), this);
         pm.registerEvents(new PlayerMoveEvent(game), this);
+        pm.registerEvents(new PlayerInteractEvent(game),this);
         pm.registerEvents(new BlockBreakEvent(game), this);
 
         new BukkitRunnable() {

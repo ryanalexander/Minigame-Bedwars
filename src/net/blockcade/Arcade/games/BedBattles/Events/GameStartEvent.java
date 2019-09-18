@@ -132,9 +132,6 @@ public class GameStartEvent implements Listener {
             relativeBlockData.setFacing(direction);
             relative.setBlockData(relativeBlockData);
 
-            game.BlockManager().update(bed.getLocation(),Material.AIR,null);
-            game.BlockManager().update(relative.getLocation(),Material.AIR,null);
-
             teamb.setBed(bed);
 
             Main.beds.put(bed,teamb);
