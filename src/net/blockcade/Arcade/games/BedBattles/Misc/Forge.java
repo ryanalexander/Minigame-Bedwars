@@ -28,11 +28,9 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Main;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,6 +45,7 @@ public class Forge {
     private int max_material=0;
     private int amount;
     private long speed;
+    private long base_speed;
 
     /**
      * @param game     Game object
@@ -60,6 +59,7 @@ public class Forge {
         this.amount = 1;
         this.max_material = max_material;
         this.speed = speed;
+        this.base_speed = speed;
         this.run();
     }
 
@@ -140,19 +140,28 @@ public class Forge {
         this.speed = speed;
     }
 
+    public void incresePercent(long percent) {
+        setSpeed(base_speed-(base_speed*percent)/100);
+    }
+
     private void run() {
+        Forge f = this;
         new BukkitRunnable() {
+            Forge forge = f;
+            int i = 0;
             @Override
             public void run() {
-                if (Forge.this.stopped) {
+                if (forge.stopped) {
                     cancel();
                     return;
                 }
-
-                if(getEntitiesAroundPoint(location,4,new ItemStack(material))<=max_material)drop();
-                Forge.this.run();
+                i=i+5;
+                if(i>=forge.speed){
+                    if(getEntitiesAroundPoint(location,4,new ItemStack(material))<=max_material)drop();
+                    i=0;
+                }
             }
-        }.runTaskLater(Main.getPlugin(Main.class), this.speed);
+        }.runTaskTimer(Main.getPlugin(Main.class), 0,5);
     }
 
     private static Integer getEntitiesAroundPoint(Location location, double radius, ItemStack type) {

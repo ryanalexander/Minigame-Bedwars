@@ -44,6 +44,8 @@ package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Utils.Item;
 import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.games.BedBattles.Main;
+import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -133,6 +135,8 @@ public class tools implements Listener {
                         }
                         ItemStack is = new ItemStack(next, 1);
                         is.addEnchantment(Enchantment.DIG_SPEED,1);
+                        if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0)
+                            is.addEnchantment(Enchantment.DAMAGE_ALL, 1);
                         p.getInventory().addItem(new ItemStack(is));
                         p.openInventory(tools.getShop(game, p));
                     }

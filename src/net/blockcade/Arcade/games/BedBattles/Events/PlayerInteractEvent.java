@@ -2,34 +2,23 @@ package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Utils.Spectator;
-import net.blockcade.Arcade.Utils.Text;
 import net.blockcade.Arcade.Varables.GameState;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.Material;
+import org.bukkit.Rotation;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapFont;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jcp.xml.dsig.internal.dom.Utils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.net.URL;
-
-import static org.bukkit.Bukkit.getServer;
+import java.util.Objects;
 
 public class PlayerInteractEvent implements Listener {
 
@@ -54,9 +43,7 @@ public class PlayerInteractEvent implements Listener {
                     e.setUseInteractedBlock(Event.Result.DENY);
                     break;
                 case FIRE_CHARGE:
-                    Fireball fireball = e.getPlayer().getWorld().spawn(e.getPlayer().getLocation(), Fireball.class);
-                    fireball.setDirection(e.getPlayer().getEyeLocation().getDirection());
-                    fireball.setVelocity(fireball.getDirection().multiply(0.1));
+                    e.getPlayer().launchProjectile(Fireball.class,e.getPlayer().getLocation().getDirection());
                     e.getItem().setAmount(e.getItem().getAmount()-1);
                     e.setUseItemInHand(Event.Result.DENY);
                     e.setUseInteractedBlock(Event.Result.DENY);
@@ -81,6 +68,17 @@ public class PlayerInteractEvent implements Listener {
                     e.setUseInteractedBlock(Event.Result.DENY);
                     break;
             }
+        }
+    }
+
+    @EventHandler
+    public void ProjectileHitEvent(ProjectileHitEvent e){
+        switch (e.getEntity().getType()){
+            case FIREBALL:
+                Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld().createExplosion(e.getHitBlock().getLocation(),0,true);
+                TNTPrimed tnt = (TNTPrimed)Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld().spawnEntity(e.getHitBlock().getLocation(),EntityType.PRIMED_TNT);
+                tnt.setFuseTicks(0);
+                break;
         }
     }
 

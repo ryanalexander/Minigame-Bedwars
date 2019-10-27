@@ -65,7 +65,7 @@ public class BlockBreakEvent implements Listener {
             "%s&7's bed has been broken by %s",
             "&7Looks like %s&7's bed was shown the exit by %s",
             "&7%s&7 team couldn't protect their bed from %s",
-            "Oh no! %s&7's bed has followed the way to islam, off it goes!"
+            "Oh no! %s&7 was shown the way to insomnia by %s"
     };
 
     @EventHandler(priority = EventPriority.HIGHEST)

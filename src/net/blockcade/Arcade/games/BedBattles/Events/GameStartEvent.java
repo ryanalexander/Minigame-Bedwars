@@ -30,7 +30,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -138,7 +137,7 @@ public class GameStartEvent implements Listener {
 
 
             // Create Forges
-            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (1 * 20), true,50);
+            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (2 * 20), true,50);
             Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (5 * 20), true,30);
 
             teamb.setIron_forge(iron_forge);

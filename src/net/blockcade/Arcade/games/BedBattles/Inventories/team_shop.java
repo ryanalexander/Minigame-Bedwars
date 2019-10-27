@@ -33,10 +33,8 @@ import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.traps;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
-import net.blockcade.Arcade.games.BedBattles.Variables.RomanNumerals;
-import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
-import net.blockcade.Arcade.games.BedBattles.Variables.armor_level;
-import net.blockcade.Arcade.games.BedBattles.Variables.haste_level;
+import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
+import net.blockcade.Arcade.games.BedBattles.Variables.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -157,6 +155,54 @@ public class team_shop implements Listener {
         });
 
         Item forge = new Item(Material.FURNACE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) ? "&a" : "&c") + "%s Forge");
+
+        forge.setLore(new String[]{
+                Text.format("&7Upgrade resources spawning on"),
+                Text.format("&7you island."),
+                "",
+                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 1 ? "&a" : "&7") + "Tier 1&7: +50% Resources, &b2 Diamonds"),
+                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 2 ? "&a" : "&7") + "Tier 2&7: +100% Resources, &b4 Diamonds"),
+                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 3 ? "&a" : "&7") + "Tier 3&7: Spawn emeralds, &b6 Diamonds"),
+                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 4 ? "&a" : "&7") + "Tier 4&7: +200% Resources, &b8 Diamonds"),
+                "",
+                (!((getOrZero(team, TeamUpgrades.FORGE) + 1) >= 4) ? (player.getInventory().containsAtLeast(forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice(), forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded")
+        });
+
+        forge.setOnClick(new Item.click() {
+            @Override
+            public void run(Player p) {
+                TeamColors team = game.TeamManager().getTeam(p);
+                if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) && Main.teams.get(team).upgrades.get(TeamUpgrades.FORGE) >= 4)
+                    return;
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getType()), forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getAmount())) {
+                    Main.teams.get(team).upgrades.put(TeamUpgrades.FORGE, (getOrZero(team, TeamUpgrades.FORGE) + 1));
+                    switch (getOrZero(team, TeamUpgrades.FORGE)){
+                        case 1:
+                            Main.teams.get(team).getIron_forge().incresePercent(25);
+                            Main.teams.get(team).getGold_forge().incresePercent(25);
+                            break;
+                        case 2:
+                            Main.teams.get(team).getIron_forge().incresePercent(50);
+                            Main.teams.get(team).getGold_forge().incresePercent(50);
+                            break;
+                        case 3:
+                            Forge forge = new Forge(game,Main.teams.get(team).getIron_forge().getLocation(),Material.EMERALD,(30 * 20),false,2);
+                            Main.teams.get(team).setEmerald_forge(forge);
+                            break;
+                        case 4:
+                            Main.teams.get(team).getIron_forge().incresePercent(80);
+                            Main.teams.get(team).getGold_forge().incresePercent(80);
+                            Main.teams.get(team).getEmerald_forge().incresePercent(25);
+                            break;
+                        default:
+                            break;
+                    }
+                    p.openInventory((new team_shop()).getShop(game, p));
+                }
+            }
+        });
+
+
 
         Item healing = new Item(Material.BEACON, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) ? "&a" : "&c") + "Heal Pool");
         healing.setLore(new String[]{

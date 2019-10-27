@@ -46,6 +46,7 @@ import net.blockcade.Arcade.Utils.Item;
 import net.blockcade.Arcade.Utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -167,13 +168,22 @@ public class specials implements Listener {
             }
         });
 
+        Item disabled = new Item(BARRIER, "&cItem Disabled");
+        disabled.setLore(new String[]{"&r","&fThis is has been disabled","&fin some cases this may be","&ftemporary, or due to technical issues.","&r","&6Check again later."});
+        disabled.setOnClick(new Item.click() {
+            @Override
+            public void run(Player param1Player) {
+                param1Player.playSound(param1Player.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,1f);
+            }
+        });
+
 
         specials.shop.setItem(0, close.spigot());
         specials.shop.setItem(19, tnt.spigot());
         specials.shop.setItem(20, epearl.spigot());
         specials.shop.setItem(21, water.spigot());
-        specials.shop.setItem(22,fireball.spigot());
-        //specials.shop.setItem(23, bridge_egg.spigot());
+        specials.shop.setItem(22,disabled.spigot()); // Fireball
+        specials.shop.setItem(23, disabled.spigot()); // Bridge Egg
         specials.shop.setItem(24, golden_apple.spigot());
         specials.shop.setItem(28, ender_chest.spigot());
         return specials.shop;
