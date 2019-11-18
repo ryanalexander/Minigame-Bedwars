@@ -42,8 +42,8 @@ package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.Bukkit;
@@ -56,7 +56,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.itemUpgrades.*;
+import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.itemUpgrades.AXE;
+import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.itemUpgrades.PICAXE;
 import static org.bukkit.Material.*;
 
 public class tools implements Listener {
@@ -68,7 +69,7 @@ public class tools implements Listener {
     // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
 
     public static Inventory getShop(Game game, Player player) {
-        tools.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully's Tools")), false);
+        tools.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cHard Worker Utilities")), true,0);
 
         Item close = new Item(Material.BARRIER, "&cBack");
         close.setOnClick(new Item.click() {
@@ -86,6 +87,9 @@ public class tools implements Listener {
         shears.setAmount(1);
         shears.setOnClick(new Item.click() {
             public void run(Player p) {
+                if(player.getInventory().contains(SHEARS)){
+                    return;
+                }
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.IRON_INGOT, 20))
                     p.getInventory().addItem(new ItemStack(Material.SHEARS, 1));
             }
@@ -105,12 +109,14 @@ public class tools implements Listener {
                     if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, pickaxe_cost.getType(), pickaxe_cost.getAmount())) {
                         Material last = lastUpgrade(player, PICAXE);
                         Material next = nextUpgrade(player, PICAXE);
-                        if (last != null) {
+                        ItemStack is = new ItemStack(next, 1);
+                        is.addEnchantment(Enchantment.DIG_SPEED,1);
+                        if (last != null&&p.getInventory().first(last)>=0) {
+                            p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
                             p.getInventory().remove(last);
+                        }else {
+                            p.getInventory().addItem(new ItemStack(is));
                         }
-                            ItemStack is = new ItemStack(next, 1);
-                            is.addEnchantment(Enchantment.DIG_SPEED,1);
-                        p.getInventory().addItem(new ItemStack(is));
                         p.openInventory(tools.getShop(game, p));
                     }
                 }
@@ -130,55 +136,31 @@ public class tools implements Listener {
                     if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
                         Material last = lastUpgrade(player, AXE);
                         Material next = nextUpgrade(player, AXE);
-                        if (last != null) {
-                            p.getInventory().remove(last);
-                        }
                         ItemStack is = new ItemStack(next, 1);
                         is.addEnchantment(Enchantment.DIG_SPEED,1);
-                        if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0)
+                        if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0) {
                             is.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-                        p.getInventory().addItem(new ItemStack(is));
-                        p.openInventory(tools.getShop(game, p));
-                    }
-                }
-            }
-        });
-
-        Item shovel = new Item(nextUpgrade(player, SHOVEL), "&bSHOVEL");
-        ItemStack shovel_cost = getPrice(player, SHOVEL);
-        shovel.setLore(new String[]{
-                "&r",
-                "&7Cost: &f" + ((shovel_cost != null) ? shovel_cost.getAmount() + " " + shovel_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded")
-        });
-        shovel.setAmount(1);
-        shovel.setOnClick(new Item.click() {
-            public void run(Player p) {
-                if (shovel_cost != null) {
-                    if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, shovel_cost.getType(), shovel_cost.getAmount())) {
-                        Material last = lastUpgrade(player, SHOVEL);
-                        Material next = nextUpgrade(player, SHOVEL);
-                        if (last != null) {
-                            p.getInventory().remove(last);
                         }
-                        ItemStack is = new ItemStack(next, 1);
-                        is.addEnchantment(Enchantment.DIG_SPEED,1);
-                        p.getInventory().addItem(new ItemStack(is));
+                        if (last != null) {
+                            p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
+                            p.getInventory().remove(last);
+                        }else {
+                            p.getInventory().addItem(new ItemStack(is));
+                        }
                         p.openInventory(tools.getShop(game, p));
                     }
                 }
             }
         });
 
-        tools.shop.setItem(0, close.spigot());
-        if (!(player.getInventory().contains(Material.SHEARS)))
-            tools.shop.setItem(19, shears.spigot());
-        tools.shop.setItem(20, pickaxe.spigot());
-        tools.shop.setItem(21, axe.spigot());
-        tools.shop.setItem(22, shovel.spigot());
+        tools.shop.setItem(29,shears.spigot());
+        tools.shop.setItem(31,axe.spigot());
+        tools.shop.setItem(33,pickaxe.spigot());
 
         tools.menus.add(tools.shop);
         return tools.shop;
     }
+
 
     public static Material nextUpgrade(Player player, itemUpgrades upgrade) {
         switch (upgrade) {
@@ -210,20 +192,6 @@ public class tools implements Listener {
                     return IRON_AXE;
                 }
                 return WOODEN_AXE;
-            case SHOVEL:
-                if (player.getInventory().contains(DIAMOND_SHOVEL)) {
-                    return DIAMOND_SHOVEL;
-                }
-                if (player.getInventory().contains(GOLDEN_SHOVEL)) {
-                    return DIAMOND_SHOVEL;
-                }
-                if (player.getInventory().contains(IRON_SHOVEL)) {
-                    return GOLDEN_SHOVEL;
-                }
-                if (player.getInventory().contains(WOODEN_SHOVEL)) {
-                    return IRON_SHOVEL;
-                }
-                return WOODEN_SHOVEL;
             default:
                 break;
         }
@@ -260,24 +228,46 @@ public class tools implements Listener {
                     return WOODEN_AXE;
                 }
                 return null;
-            case SHOVEL:
-                if (player.getInventory().contains(DIAMOND_SHOVEL)) {
-                    return DIAMOND_SHOVEL;
+            default:
+                System.out.println("Invalid item requested "+upgrade.name());
+                return null;
+        }
+    }
+
+    public static Material previousUpgrade(Player player, itemUpgrades upgrade) {
+        switch (upgrade) {
+            case PICAXE:
+                if (player.getInventory().contains(DIAMOND_PICKAXE)) {
+                    return GOLDEN_PICKAXE;
                 }
-                if (player.getInventory().contains(GOLDEN_SHOVEL)) {
-                    return GOLDEN_SHOVEL;
+                if (player.getInventory().contains(GOLDEN_PICKAXE)) {
+                    return IRON_PICKAXE;
                 }
-                if (player.getInventory().contains(IRON_SHOVEL)) {
-                    return IRON_SHOVEL;
+                if (player.getInventory().contains(IRON_PICKAXE)) {
+                    return WOODEN_PICKAXE;
                 }
-                if (player.getInventory().contains(WOODEN_SHOVEL)) {
-                    return WOODEN_SHOVEL;
+                if (player.getInventory().contains(WOODEN_PICKAXE)) {
+                    return WOODEN_PICKAXE;
+                }
+                return null;
+            case AXE:
+                if (player.getInventory().contains(DIAMOND_AXE)) {
+                    return GOLDEN_AXE;
+                }
+                if (player.getInventory().contains(GOLDEN_AXE)) {
+                    return IRON_AXE;
+                }
+                if (player.getInventory().contains(IRON_AXE)) {
+                    return WOODEN_AXE;
+                }
+                if (player.getInventory().contains(WOODEN_AXE)) {
+                    return WOODEN_AXE;
                 }
                 return null;
             default:
-                break;
+                System.out.println("Invalid item requested "+upgrade.name());
+                return null;
         }
-        return null;
     }
 
     public static ItemStack getPrice(Player player, itemUpgrades upgrade) {
@@ -307,20 +297,6 @@ public class tools implements Listener {
                     return new ItemStack(Material.GOLD_INGOT, 8);
                 }
                 if (player.getInventory().contains(WOODEN_AXE)) {
-                    return new ItemStack(Material.IRON_INGOT, 20);
-                }
-                return new ItemStack(IRON_INGOT, 10);
-            case SHOVEL:
-                if (player.getInventory().contains(DIAMOND_SHOVEL)) {
-                    return null;
-                }
-                if (player.getInventory().contains(GOLDEN_SHOVEL)) {
-                    return new ItemStack(Material.GOLD_INGOT, 16);
-                }
-                if (player.getInventory().contains(IRON_SHOVEL)) {
-                    return new ItemStack(Material.GOLD_INGOT, 8);
-                }
-                if (player.getInventory().contains(WOODEN_SHOVEL)) {
                     return new ItemStack(Material.IRON_INGOT, 20);
                 }
                 return new ItemStack(IRON_INGOT, 10);

@@ -42,8 +42,8 @@ package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
@@ -69,7 +69,7 @@ public class weapons implements Listener {
     // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
 
     public static Inventory getShop(Game game, Player player) {
-        weapons.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully's weapons")), false);
+        weapons.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cWeapons of minimal destruction")), true,0);
         TeamColors team = game.TeamManager().getTeam(player);
 
         Item close = new Item(Material.BARRIER, "&cBack");
@@ -181,13 +181,12 @@ public class weapons implements Listener {
             }
         });
 
-        weapons.shop.setItem(0, close.spigot());
-        weapons.shop.setItem(19, stone_sword.spigot());
-        weapons.shop.setItem(20, iron_sword.spigot());
-        weapons.shop.setItem(22, diamond_sword.spigot());
-        weapons.shop.setItem(23, bow.spigot());
-        weapons.shop.setItem(24, super_bow.spigot());
-        weapons.shop.setItem(25, arrows.spigot());
+        weapons.shop.setItem(28, stone_sword.spigot());
+        weapons.shop.setItem(29, iron_sword.spigot());
+        weapons.shop.setItem(30, diamond_sword.spigot());
+        weapons.shop.setItem(32, bow.spigot());
+        weapons.shop.setItem(33, super_bow.spigot());
+        weapons.shop.setItem(34, arrows.spigot());
 
         weapons.menus.add(weapons.shop);
         return weapons.shop;

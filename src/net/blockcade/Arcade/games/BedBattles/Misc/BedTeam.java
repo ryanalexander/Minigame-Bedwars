@@ -27,12 +27,13 @@
 package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamTraps;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
@@ -46,6 +47,8 @@ public class BedTeam {
 
     public HashMap<TeamUpgrades, Integer> upgrades = new HashMap<>();
     public ArrayList<TeamTraps> traps = new ArrayList<>();
+
+    public Chest chest;
 
     public Inventory Enderchest;
 
@@ -113,6 +116,14 @@ public class BedTeam {
 
     public TeamColors getTeam() {
         return this.team;
+    }
+
+    public Chest getChest() {
+        return chest;
+    }
+
+    public void setChest(Chest chest) {
+        this.chest = chest;
     }
 
     public boolean canRespawn() {

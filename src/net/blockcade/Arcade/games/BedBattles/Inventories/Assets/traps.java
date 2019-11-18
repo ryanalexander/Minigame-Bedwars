@@ -1,14 +1,12 @@
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
-import net.blockcade.Arcade.games.BedBattles.Inventories.team_shop;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamTraps;
-import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +20,7 @@ public class traps implements Listener {
 
     public static Inventory getShop(Game game, Player player){
 
-        traps.shop= header.format(game, Bukkit.createInventory(null,9*6, Text.format("&cSkully's Security Systems")),false);
+        traps.shop= header.format(game, Bukkit.createInventory(null,9*6, Text.format("&cSecurity Systems")),false,0);
 
         BedTeam bedTeam = Main.teams.get(game.TeamManager().getTeam(player));
 

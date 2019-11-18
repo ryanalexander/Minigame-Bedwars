@@ -17,7 +17,7 @@ import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Managers.EntityManager;
 import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Utils.JavaUtils;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Inventories.shop;
 import net.blockcade.Arcade.games.BedBattles.Inventories.team_shop;
@@ -30,6 +30,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -116,6 +117,13 @@ public class GameStartEvent implements Listener {
                 }
             });
 
+            Block _chest = game.TeamManager().getConfigLocation("chest",team).getBlock();
+            _chest.setType(Material.CHEST);
+            Chest chest = (Chest)_chest.getState();
+            teamb.setChest(chest);
+            chest.getBlockInventory().clear();
+
+
             Block bed = game.TeamManager().getConfigLocation("bed", team).getBlock();
             BlockFace direction = JavaUtils.direction((float)game.TeamManager().getConfigInt("bed.yaw", team));
             bed.setType(Material.RED_BED);
@@ -133,6 +141,7 @@ public class GameStartEvent implements Listener {
 
             teamb.setBed(bed);
 
+            Main.chests.put(chest,teamb);
             Main.beds.put(bed,teamb);
 
 

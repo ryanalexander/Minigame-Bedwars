@@ -27,8 +27,8 @@
 package net.blockcade.Arcade.games.BedBattles.Inventories;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.traps;
 import net.blockcade.Arcade.games.BedBattles.Main;
@@ -91,7 +91,13 @@ public class team_shop implements Listener {
                                             is.getType() == (Material.STONE_SWORD) ||
                                             is.getType() == (Material.GOLDEN_SWORD) ||
                                             is.getType() == (Material.IRON_SWORD) ||
-                                            is.getType() == (Material.DIAMOND_SWORD)
+                                            is.getType() == (Material.DIAMOND_SWORD) ||
+
+                                            is.getType() == (Material.WOODEN_AXE) ||
+                                            is.getType() == (Material.STONE_AXE) ||
+                                            is.getType() == (Material.GOLDEN_AXE) ||
+                                            is.getType() == (Material.IRON_AXE) ||
+                                            is.getType() == (Material.DIAMOND_AXE)
                             ) {
                                 is.addEnchantment(Enchantment.DAMAGE_ALL, 1);
                             }
@@ -125,6 +131,12 @@ public class team_shop implements Listener {
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice().getType()), armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice().getAmount())) {
                     Main.teams.get(team).upgrades.put(TeamUpgrades.REINFORCED_ARMOR, (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1));
                     p.openInventory((new team_shop()).getShop(game, p));
+                    for(Player player1 : game.TeamManager().getTeamPlayers(team)) {
+                        for (ItemStack is : player1.getPlayer().getInventory().getArmorContents()) {
+                            if (is == null) continue;
+                            is.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, Main.teams.get(team).upgrades.get(TeamUpgrades.REINFORCED_ARMOR));
+                        }
+                    }
                 }
             }
         });

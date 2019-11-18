@@ -40,7 +40,7 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import org.bukkit.Bukkit;

@@ -14,7 +14,7 @@
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
+import net.blockcade.Arcade.Utils.Formatting.Item;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -23,19 +23,25 @@ import org.bukkit.inventory.ItemStack;
 
 public class header {
 
-    public static Inventory format(Game game, Inventory inv, boolean header) {
-        ItemStack placeholder = new Item(Material.BLACK_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
+    public static Inventory format(Game game, Inventory inv, boolean header, int offset) {
+        return format(game,inv,header,false,offset);
+    }
+
+    public static Inventory format(Game game, Inventory inv, boolean header, boolean hasquickbuy, int offset) {
+        offset=offset-1;
+
+        ItemStack placeholder = new Item(Material.GRAY_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
             @Override
             public void run(Player param1Player) {
 
             }
         }).spigot();
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i <= inv.getSize()-1; i++) {
             inv.setItem(i, placeholder);
         }
 
         if (header) {
-            Item quick_buy = new Item(Material.WHITE_STAINED_GLASS_PANE, "&fQuick Buy");
+            Item quick_buy = new Item(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "&fQuick Buy");
             quick_buy.setOnClick(new Item.click() {
                 @Override
                 public void run(Player p) {
@@ -44,13 +50,11 @@ public class header {
             });
             quick_buy.setLore(new String[]{"&7To set this &bQuick Buy&7 slot","&7just &bShift + Click&7 and click","&7any item from the menu"});
 
-            Item Blocks = new Item(Material.END_STONE, "&6Blocks");
-            Item Weapons = new Item(Material.STONE_SWORD, "&6Weapons");
+            Item Blocks = new Item(Material.OAK_PLANKS, "&6Blocks");
+            Item Weapons = new Item(Material.DIAMOND_SWORD, "&6Weapons");
             Item Armor = new Item(Material.IRON_CHESTPLATE, "&6Armor");
             Item Tools = new Item(Material.GOLDEN_PICKAXE, "&6Tools");
-            Item Potions = new Item(Material.DRAGON_BREATH, "&6Potions");
-            Item Eggs = new Item(Material.MAGMA_CUBE_SPAWN_EGG, "&6Eggs");
-            Item Special = new Item(Material.TNT, "&6Special");
+            Item Special = new Item(Material.FIRE_CHARGE, "&6Specials");
 
             Blocks.setOnClick(new Item.click() {
                 public void run(Player p) {
@@ -72,40 +76,36 @@ public class header {
                     p.openInventory(tools.getShop(game, p));
                 }
             });
-            Potions.setOnClick(new Item.click() {
-                public void run(Player p) {
-                    p.openInventory(potions.getShop(game, p));
-                }
-            });
-            Eggs.setOnClick(new Item.click() {
-                public void run(Player p) {
-                    p.openInventory(eggs.getShop(game, p));
-                }
-            });
             Special.setOnClick(new Item.click() {
                 public void run(Player p) {
                     p.openInventory(specials.getShop(game, p));
                 }
             });
 
-            inv.setItem(10, Blocks.spigot());
-            inv.setItem(11, Weapons.spigot());
-            inv.setItem(12, Armor.spigot());
-            inv.setItem(13, Tools.spigot());
-            inv.setItem(14, Potions.spigot());
-            inv.setItem(15, Eggs.spigot());
-            inv.setItem(16, Special.spigot());
+            inv.setItem(offset+2, Blocks.spigot());
+            inv.setItem(offset+3, Weapons.spigot());
+            inv.setItem(offset+5, Armor.spigot());
+            inv.setItem(offset+7, Tools.spigot());
+            inv.setItem(offset+8, Special.spigot());
 
             /*
              Quick buy slots
              */
-            inv.setItem(28,quick_buy.spigot());
-            inv.setItem(29,quick_buy.spigot());
-            inv.setItem(30,quick_buy.spigot());
-            inv.setItem(31,quick_buy.spigot());
-            inv.setItem(32,quick_buy.spigot());
-            inv.setItem(33,quick_buy.spigot());
-            inv.setItem(34,quick_buy.spigot());
+            if(hasquickbuy) {
+                inv.setItem(28, quick_buy.spigot());
+                inv.setItem(29, quick_buy.spigot());
+                inv.setItem(30, quick_buy.spigot());
+                inv.setItem(31, quick_buy.spigot());
+                inv.setItem(32, quick_buy.spigot());
+                inv.setItem(33, quick_buy.spigot());
+                inv.setItem(34, quick_buy.spigot());
+
+                inv.setItem(38, quick_buy.spigot());
+                inv.setItem(39, quick_buy.spigot());
+                inv.setItem(40, quick_buy.spigot());
+                inv.setItem(41, quick_buy.spigot());
+                inv.setItem(42, quick_buy.spigot());
+            }
         }
 
         return inv;

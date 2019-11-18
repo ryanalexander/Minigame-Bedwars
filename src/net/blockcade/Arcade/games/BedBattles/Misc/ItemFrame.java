@@ -1,17 +1,10 @@
 package net.blockcade.Arcade.games.BedBattles.Misc;
 
-import com.mojang.authlib.GameProfile;
-import net.blockcade.Arcade.Utils.Utils;
-import net.minecraft.server.v1_14_R1.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import javax.imageio.ImageIO;
@@ -22,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getServer;
 

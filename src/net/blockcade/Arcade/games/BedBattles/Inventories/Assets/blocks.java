@@ -41,8 +41,8 @@
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Item;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -61,7 +61,7 @@ public class blocks implements Listener {
     // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
 
     public static Inventory getShop(Game game, Player player) {
-        blocks.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully's blocks")), false);
+        blocks.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cBuilding Materials")), true,0);
 
         Item close = new Item(Material.BARRIER, "&cBack");
         close.setOnClick(new Item.click() {
@@ -109,23 +109,7 @@ public class blocks implements Listener {
                     p.getInventory().addItem(new ItemStack(Material.valueOf(game.TeamManager().getTeam(player).getTranslation().toUpperCase() + "_TERRACOTTA"), 12));
             }
         });
-
-        Item sand = new Item(Material.SAND, "&bSand");
-        sand.setLore(new String[]{
-                "&r",
-                "&7Cost: &f24 Iron",
-                "&r",
-                "&dFalls"
-        });
-        sand.setAmount(4);
-        sand.setOnClick(new Item.click() {
-            public void run(Player p) {
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.IRON_INGOT, 24))
-                    p.getInventory().addItem(new ItemStack(Material.SAND, 4));
-            }
-        });
-
-        Item glass = new Item(Material.GLASS, "&bGlass");
+        Item glass = new Item(Material.valueOf(game.TeamManager().getTeam(player).getTranslation().toUpperCase() + "_STAINED_GLASS"), "&bGlass");
         glass.setLore(new String[]{
                 "&r",
                 "&7Cost: &f12 Iron",
@@ -168,14 +152,13 @@ public class blocks implements Listener {
             }
         });
 
-        blocks.shop.setItem(0, close.spigot());
-        blocks.shop.setItem(19, wool.spigot());
-        blocks.shop.setItem(20, wooden_planks.spigot());
-        blocks.shop.setItem(21, clay.spigot());
-        blocks.shop.setItem(22, sand.spigot());
-        blocks.shop.setItem(23, glass.spigot());
-        blocks.shop.setItem(24, end_stone.spigot());
-        blocks.shop.setItem(25, obsidian.spigot());
+        blocks.shop.setItem(20, wool.spigot());
+        blocks.shop.setItem(22, clay.spigot());
+        blocks.shop.setItem(24, glass.spigot());
+
+        blocks.shop.setItem(38, wooden_planks.spigot());
+        blocks.shop.setItem(40, end_stone.spigot());
+        blocks.shop.setItem(42, obsidian.spigot());
 
         blocks.menus.add(blocks.shop);
         return blocks.shop;

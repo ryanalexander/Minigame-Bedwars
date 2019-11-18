@@ -27,13 +27,12 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Spectator;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.GameUtils.Spectator;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -56,6 +55,7 @@ public class PlayerMoveEvent implements Listener {
     public void PlayerMove(org.bukkit.event.player.PlayerMoveEvent e) {
         if (!game.TeamManager().hasTeam(e.getPlayer())) return;
         TeamColors team = game.TeamManager().getTeam(e.getPlayer());
+
 
 
         BedTeam closest = closestBed(e.getTo());

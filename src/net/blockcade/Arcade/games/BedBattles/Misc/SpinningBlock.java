@@ -27,7 +27,7 @@
 package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Main;
-import net.blockcade.Arcade.Utils.Text;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

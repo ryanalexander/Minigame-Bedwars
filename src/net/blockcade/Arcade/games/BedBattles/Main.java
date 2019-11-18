@@ -15,6 +15,7 @@ package net.blockcade.Arcade.games.BedBattles;
 
 import net.blockcade.Arcade.Commands.GameCommand;
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Varables.GameModule;
 import net.blockcade.Arcade.Varables.GameState;
 import net.blockcade.Arcade.Varables.GameType;
 import net.blockcade.Arcade.Varables.TeamColors;
@@ -22,24 +23,25 @@ import net.blockcade.Arcade.games.BedBattles.Events.*;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.HashMap;
 
 public class Main extends JavaPlugin {
 
     public static HashMap<TeamColors, BedTeam> teams = new HashMap<>();
     public static HashMap<Block, BedTeam> beds = new HashMap<>();
+    public static HashMap<Chest, BedTeam> chests = new HashMap<>();
 
     @Override
     public void onEnable() {
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
+        game.setMaxDamageHeight(512);
 
         /*
          * Register Handlers
@@ -51,6 +53,20 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new PlayerMoveEvent(game), this);
         pm.registerEvents(new PlayerInteractEvent(game),this);
         pm.registerEvents(new BlockBreakEvent(game), this);
+        pm.registerEvents(new PotionEvent(), this);
+
+        game.setModule(GameModule.DEATH_MANAGER,true);
+        game.setModule(GameModule.VOID_DEATH,true);
+        game.setModule(GameModule.BLOCK_PLACEMENT,true);
+        game.setModule(GameModule.CHEST_BLOCK,true);
+        game.setModule(GameModule.BLOCK_ROLLBACK,true);
+        game.setModule(GameModule.NO_CRAFTING,true);
+        game.setModule(GameModule.NO_HUNGER,true);
+        game.setModule(GameModule.NO_SMELTING,true);
+        game.setModule(GameModule.NO_TOOL_DROP,true);
+        game.setModule(GameModule.START_MECHANISM,true);
+        game.setModule(GameModule.TEAMS,true);
+        game.setModule(GameModule.CHAT_MANAGER,true);
 
         new BukkitRunnable() {
             @Override

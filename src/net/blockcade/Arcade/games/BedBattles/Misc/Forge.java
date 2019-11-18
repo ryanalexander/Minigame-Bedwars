@@ -34,6 +34,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 public class Forge {
 
@@ -57,7 +58,7 @@ public class Forge {
         this.location = location;
         this.material = material;
         this.amount = 1;
-        this.max_material = max_material;
+        this.max_material = max_material-2;
         this.speed = speed;
         this.base_speed = speed;
         this.run();
@@ -157,7 +158,7 @@ public class Forge {
                 }
                 i=i+5;
                 if(i>=forge.speed){
-                    if(getEntitiesAroundPoint(location,4,new ItemStack(material))<=max_material)drop();
+                    if(getEntitiesAroundPoint(location,10,new ItemStack(material))<=max_material)drop();
                     i=0;
                 }
             }
@@ -168,7 +169,7 @@ public class Forge {
         int count = 0;
         for (Entity e : location.getWorld().getNearbyEntities(location, radius, radius, radius)) {
             if (e instanceof Item) {
-                if(((Item)e).getItemStack().equals(type))
+                if(((Item)e).getItemStack().getType().equals(type.getType()))
                     count++;
             }
         }
@@ -176,7 +177,9 @@ public class Forge {
     }
 
     private void drop() {
-        location.getWorld().dropItem(location, new ItemStack(material, amount));
+        Item i = location.getWorld().dropItem(location.clone(),new ItemStack(material,amount));
+        i.setVelocity(new Vector());
+        i.setPickupDelay(0);
     }
 
     @Override
