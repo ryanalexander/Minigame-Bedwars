@@ -26,8 +26,12 @@
 
 package net.blockcade.Arcade.games.BedBattles.Events;
 
+import com.google.common.collect.Lists;
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Utils.JavaUtils;
 import net.blockcade.Arcade.Varables.TeamColors;
+import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades;
+import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.tools;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamUpgrades;
 import org.bukkit.Material;
@@ -35,6 +39,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
 
 public class PlayerRespawnEvent implements Listener {
 
@@ -49,15 +55,35 @@ public class PlayerRespawnEvent implements Listener {
         if (!e.isEliminated()) {
             TeamColors team = game.TeamManager().getTeam(e.getPlayer());
             ItemStack sword = new ItemStack(Material.WOODEN_SWORD);
+
+            if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.SHARP_SWORD))
+                sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+            e.getPlayer().getInventory().addItem(sword);
+
+            ArrayList<Material> materials = JavaUtils.getMatFromItemstack(Lists.newArrayList(e.getInventoryContents()));
+
+            Material axe = tools.previousUpgrade(materials, ItemUpgrades.AXE);
+            Material pickaxe = tools.previousUpgrade(materials, ItemUpgrades.PICKAXE);
+
+            if(axe!=null){
+                ItemStack is = new ItemStack(axe);
+                if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.SHARP_SWORD))
+                    is.addEnchantment(Enchantment.DAMAGE_ALL,1);
+                is.addEnchantment(Enchantment.DIG_SPEED,1);
+                e.getPlayer().getInventory().addItem(new ItemStack(axe));
+            }
+            if(pickaxe!=null){
+                ItemStack is = new ItemStack(pickaxe);
+                is.addEnchantment(Enchantment.DIG_SPEED,1);
+                e.getPlayer().getInventory().addItem(new ItemStack(pickaxe));
+            }
+
             if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.REINFORCED_ARMOR)) {
                 for (ItemStack is : e.getPlayer().getInventory().getArmorContents()) {
                     if (is == null) continue;
                     is.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, Main.teams.get(team).upgrades.get(TeamUpgrades.REINFORCED_ARMOR));
                 }
             }
-            if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.SHARP_SWORD))
-                sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-            e.getPlayer().getInventory().addItem(sword);
         }
     }
 

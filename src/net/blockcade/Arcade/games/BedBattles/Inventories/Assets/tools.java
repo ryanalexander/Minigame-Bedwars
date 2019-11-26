@@ -56,8 +56,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
-import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.itemUpgrades.AXE;
-import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.itemUpgrades.PICAXE;
+import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades.AXE;
+import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades.PICKAXE;
 import static org.bukkit.Material.*;
 
 public class tools implements Listener {
@@ -87,7 +87,7 @@ public class tools implements Listener {
         shears.setAmount(1);
         shears.setOnClick(new Item.click() {
             public void run(Player p) {
-                if(player.getInventory().contains(SHEARS)){
+                if(p.getInventory().contains(SHEARS)){
                     return;
                 }
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.IRON_INGOT, 20))
@@ -96,8 +96,8 @@ public class tools implements Listener {
         });
 
 
-        Item pickaxe = new Item(nextUpgrade(player, PICAXE), "&bPickaxe");
-        ItemStack pickaxe_cost = getPrice(player, PICAXE);
+        Item pickaxe = new Item(nextUpgrade(player, PICKAXE), "&bPickaxe");
+        ItemStack pickaxe_cost = getPrice(player, PICKAXE);
         pickaxe.setLore(new String[]{
                 "&r",
                 "&7Cost: &f" + ((pickaxe_cost != null) ? pickaxe_cost.getAmount() + " " + pickaxe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded")
@@ -107,8 +107,8 @@ public class tools implements Listener {
             public void run(Player p) {
                 if (pickaxe_cost != null) {
                     if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, pickaxe_cost.getType(), pickaxe_cost.getAmount())) {
-                        Material last = lastUpgrade(player, PICAXE);
-                        Material next = nextUpgrade(player, PICAXE);
+                        Material last = currentUpgrade(p, PICKAXE);
+                        Material next = nextUpgrade(p, PICKAXE);
                         ItemStack is = new ItemStack(next, 1);
                         is.addEnchantment(Enchantment.DIG_SPEED,1);
                         if (last != null&&p.getInventory().first(last)>=0) {
@@ -130,12 +130,32 @@ public class tools implements Listener {
                 "&7Cost: &f" + ((axe_cost != null) ? axe_cost.getAmount() + " " + axe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded")
         });
         axe.setAmount(1);
+        axe.setOnClick((p)->{
+            if (axe_cost != null) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
+                    Material last = currentUpgrade(p, AXE);
+                    Material next = nextUpgrade(p, AXE);
+                    ItemStack is = new ItemStack(next, 1);
+                    is.addEnchantment(Enchantment.DIG_SPEED,1);
+                    if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0) {
+                        is.addEnchantment(Enchantment.DAMAGE_ALL, 1);
+                    }
+                    if (last != null) {
+                        p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
+                        p.getInventory().remove(last);
+                    }else {
+                        p.getInventory().addItem(new ItemStack(is));
+                    }
+                    p.openInventory(tools.getShop(game, p));
+                }
+            }
+        });
         axe.setOnClick(new Item.click() {
             public void run(Player p) {
                 if (axe_cost != null) {
                     if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
-                        Material last = lastUpgrade(player, AXE);
-                        Material next = nextUpgrade(player, AXE);
+                        Material last = currentUpgrade(p, AXE);
+                        Material next = nextUpgrade(p, AXE);
                         ItemStack is = new ItemStack(next, 1);
                         is.addEnchantment(Enchantment.DIG_SPEED,1);
                         if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0) {
@@ -162,9 +182,9 @@ public class tools implements Listener {
     }
 
 
-    public static Material nextUpgrade(Player player, itemUpgrades upgrade) {
+    public static Material nextUpgrade(Player player, ItemUpgrades upgrade) {
         switch (upgrade) {
-            case PICAXE:
+            case PICKAXE:
                 if (player.getInventory().contains(DIAMOND_PICKAXE)) {
                     return DIAMOND_PICKAXE;
                 }
@@ -198,9 +218,9 @@ public class tools implements Listener {
         return null;
     }
 
-    public static Material lastUpgrade(Player player, itemUpgrades upgrade) {
+    public static Material currentUpgrade(Player player, ItemUpgrades upgrade) {
         switch (upgrade) {
-            case PICAXE:
+            case PICKAXE:
                 if (player.getInventory().contains(DIAMOND_PICKAXE)) {
                     return DIAMOND_PICKAXE;
                 }
@@ -234,33 +254,33 @@ public class tools implements Listener {
         }
     }
 
-    public static Material previousUpgrade(Player player, itemUpgrades upgrade) {
+    public static Material previousUpgrade(ArrayList<Material> inventory, ItemUpgrades upgrade) {
         switch (upgrade) {
-            case PICAXE:
-                if (player.getInventory().contains(DIAMOND_PICKAXE)) {
+            case PICKAXE:
+                if (inventory.contains((DIAMOND_PICKAXE))) {
                     return GOLDEN_PICKAXE;
                 }
-                if (player.getInventory().contains(GOLDEN_PICKAXE)) {
+                if (inventory.contains((GOLDEN_PICKAXE))) {
                     return IRON_PICKAXE;
                 }
-                if (player.getInventory().contains(IRON_PICKAXE)) {
+                if (inventory.contains((IRON_PICKAXE))) {
                     return WOODEN_PICKAXE;
                 }
-                if (player.getInventory().contains(WOODEN_PICKAXE)) {
+                if (inventory.contains((WOODEN_PICKAXE))) {
                     return WOODEN_PICKAXE;
                 }
                 return null;
             case AXE:
-                if (player.getInventory().contains(DIAMOND_AXE)) {
+                if (inventory.contains((DIAMOND_AXE))) {
                     return GOLDEN_AXE;
                 }
-                if (player.getInventory().contains(GOLDEN_AXE)) {
+                if (inventory.contains((GOLDEN_AXE))) {
                     return IRON_AXE;
                 }
-                if (player.getInventory().contains(IRON_AXE)) {
+                if (inventory.contains((IRON_AXE))) {
                     return WOODEN_AXE;
                 }
-                if (player.getInventory().contains(WOODEN_AXE)) {
+                if (inventory.contains((WOODEN_AXE))) {
                     return WOODEN_AXE;
                 }
                 return null;
@@ -270,9 +290,9 @@ public class tools implements Listener {
         }
     }
 
-    public static ItemStack getPrice(Player player, itemUpgrades upgrade) {
+    public static ItemStack getPrice(Player player, ItemUpgrades upgrade) {
         switch (upgrade) {
-            case PICAXE:
+            case PICKAXE:
                 if (player.getInventory().contains(DIAMOND_PICKAXE)) {
                     return null;
                 }

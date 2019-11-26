@@ -26,6 +26,6 @@
 
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
-public enum itemUpgrades {
-    PICAXE, AXE
+public enum ItemUpgrades {
+    PICKAXE, AXE
 }

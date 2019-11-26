@@ -141,7 +141,7 @@ public class team_shop implements Listener {
             }
         });
 
-        Item ManiacMiner = new Item(Material.GOLDEN_PICKAXE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.MANIAC_MINER) ? "&a" : "&c") + "Maniac Miner" + RomanNumerals.valueOf("_" + getOrZero(team, TeamUpgrades.MANIAC_MINER)).getNumeral());
+        Item ManiacMiner = new Item(Material.GOLDEN_PICKAXE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.MANIAC_MINER) ? "&a" : "&c") + "Maniac Miner " + RomanNumerals.valueOf("_" + getOrZero(team, TeamUpgrades.MANIAC_MINER)).getNumeral());
 
         ManiacMiner.setLore(new String[]{
                 Text.format("&7All players on your team"),
@@ -166,7 +166,7 @@ public class team_shop implements Listener {
             }
         });
 
-        Item forge = new Item(Material.FURNACE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) ? "&a" : "&c") + "%s Forge");
+        Item forge = new Item(Material.FURNACE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) ? "&a" : "&c") + "Forge Speed");
 
         forge.setLore(new String[]{
                 Text.format("&7Upgrade resources spawning on"),
@@ -198,7 +198,7 @@ public class team_shop implements Listener {
                             Main.teams.get(team).getGold_forge().incresePercent(50);
                             break;
                         case 3:
-                            Forge forge = new Forge(game,Main.teams.get(team).getIron_forge().getLocation(),Material.EMERALD,(30 * 20),false,2);
+                            Forge forge = new Forge(game,Main.teams.get(team).getIron_forge().getLocation(),Material.EMERALD,(30 * 20),false,2,"");
                             Main.teams.get(team).setEmerald_forge(forge);
                             break;
                         case 4:

@@ -59,8 +59,8 @@ public class PlayerMoveEvent implements Listener {
 
 
         BedTeam closest = closestBed(e.getTo());
-        if(!(closest.getTeam().equals(team))&&closest.traps.size()>0&& (!Spectator.isSpectator(e.getPlayer()))){
-            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<400)){
+        if(!(closest.getTeam().equals(team))&&closest.traps.size()>0&& (!Spectator.isSpectator(e.getPlayer())) && !Main.trap_immunity.contains(e.getPlayer())){
+            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<200)){
                 switch (closest.getTrap()){
                     case ALERT:
                         e.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);

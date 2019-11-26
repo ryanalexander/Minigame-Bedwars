@@ -40,9 +40,11 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Managers.GamePlayer;
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Main;
+import net.blockcade.Arcade.games.BedBattles.Misc.BedPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -85,6 +87,8 @@ public class BlockBreakEvent implements Listener {
     private void handleBedBreak(Player blockBreaker, Block bed) {
         TeamColors teamBed = Main.beds.getOrDefault(bed, null).getTeam();
         TeamColors breaker = game.TeamManager().getTeam(blockBreaker);
+        GamePlayer breaker_gp = GamePlayer.getGamePlayer(blockBreaker);
+        BedPlayer breaker_bp = BedPlayer.getBedPlayer(breaker_gp);
 
         if (teamBed.equals(breaker)) {
             blockBreaker.sendMessage(Text.format("&cYou may not break your own bed!"));
@@ -93,6 +97,8 @@ public class BlockBreakEvent implements Listener {
             bed.setType(Material.AIR);
             Random rand = new Random();
             game.TeamManager().setCantRespawn(teamBed, true);
+
+            breaker_bp.setBedDestroys(breaker_bp.getBedDestroys()+1);
             Bukkit.broadcastMessage(Text.format(String.format(bed_message[rand.nextInt(bed_message.length)], teamBed.getChatColor() + teamBed.name(), breaker.getChatColor() + blockBreaker.getDisplayName())));
             try {
                 bed.getLocation().getWorld().strikeLightningEffect(bed.getLocation());

@@ -42,15 +42,21 @@ package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Formatting.Item;
 import net.blockcade.Arcade.Utils.Formatting.Text;
+import net.blockcade.Arcade.games.BedBattles.Misc.Item;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import static org.bukkit.Material.*;
 
@@ -58,119 +64,141 @@ public class specials implements Listener {
 
     private static Inventory shop;
 
-    // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
-
     public static Inventory getShop(Game game, Player player) {
         specials.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cMy little friends'")), true,0);
 
-        Item tnt = new Item(Material.TNT, "&bTNT");
-        tnt.setLore(new String[]{
+        ItemStack invisIS = new ItemStack(POTION);
+        PotionMeta invisMeta = (PotionMeta)invisIS.getItemMeta();
+        assert invisMeta != null;
+        invisMeta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
+        invisIS.setItemMeta(invisMeta);
+        net.blockcade.Arcade.Utils.Formatting.Item invis = new net.blockcade.Arcade.Utils.Formatting.Item(invisIS, "&bInvisibility Potion");
+        invis.setLore(new String[]{
                 "&r",
-                "&7Cost: &64 Gold"
+                "&7Cost: &a2 Emeralds",
+                "&r",
+                "&7Duration: &f30 Secs"
         });
-        tnt.setAmount(1);
-        tnt.setOnClick((Player p)->{
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 4))
-                    p.getInventory().addItem(new ItemStack(Material.TNT, 1));
+        invis.setAmount(1);
+        invis.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
+            public void run(Player p) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 2)) {
+                    ItemStack potion = new ItemStack(Material.POTION, 1);
+
+                    PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
+                    potionmeta.setMainEffect(PotionEffectType.INVISIBILITY);
+                    PotionEffect speed = new PotionEffect(PotionEffectType.INVISIBILITY, (30 * 20), 1);
+                    potionmeta.addCustomEffect(speed, true);
+                    potionmeta.setDisplayName(Text.format("&bInvisibility Potion"));
+                    potion.setItemMeta(potionmeta);
+                    p.getInventory().addItem(potion);
+                }
+            }
+        });
+        ItemStack jumpIS = new ItemStack(POTION);
+        PotionMeta jumpMeta = (PotionMeta)jumpIS.getItemMeta();
+        assert jumpMeta != null;
+        jumpMeta.setBasePotionData(new PotionData(PotionType.JUMP));
+        jumpIS.setItemMeta(jumpMeta);
+        net.blockcade.Arcade.Utils.Formatting.Item jump = new net.blockcade.Arcade.Utils.Formatting.Item(jumpIS, "&bJump Juice");
+        jump.setLore(new String[]{
+                "&r",
+                "&7Cost: &a1 Emerald",
+                "&r",
+                "&7Duration: &f30 Secs"
+        });
+        jump.setAmount(1);
+        jump.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
+            public void run(Player p) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 1)) {
+                    ItemStack potion = new ItemStack(Material.POTION, 1);
+
+                    PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
+                    potionmeta.setMainEffect(PotionEffectType.JUMP);
+                    PotionEffect speed = new PotionEffect(PotionEffectType.JUMP, (30 * 20), 3);
+                    potionmeta.addCustomEffect(speed, true);
+                    potionmeta.setColor(Color.LIME);
+                    potionmeta.setDisplayName(Text.format("&bJump Juice"));
+                    potion.setItemMeta(potionmeta);
+                    p.getInventory().addItem(potion);
+                }
+            }
         });
 
-        Item epearl = new Item(ENDER_PEARL, "&bEnder Pearl");
-        epearl.setLore(new String[]{
+        net.blockcade.Arcade.Utils.Formatting.Item milk = new net.blockcade.Arcade.Utils.Formatting.Item(MILK_BUCKET, "&bMilk");
+        milk.setLore(new String[]{
                 "&r",
-                "&7Cost: &a4 Emeralds"
+                "&7Cost: &a5 Gold",
+                "&r",
+                "&7Duration: &f30 Secs",
+                "&r",
+                "&dBecome immune to traps"
         });
-        epearl.setAmount(1);
-        epearl.setOnClick((Player p)->{
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 4))
-                    p.getInventory().addItem(new ItemStack(ENDER_PEARL, 1));
+        milk.setOnClick(p -> {
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 5)) {
+                p.getInventory().addItem(new ItemStack(MILK_BUCKET));
+            }
         });
 
-        Item water = new Item(WATER_BUCKET, "&bWater");
-        water.setLore(new String[]{
+        ItemStack speedIS = new ItemStack(POTION);
+        PotionMeta speedMeta = (PotionMeta)speedIS.getItemMeta();
+        assert speedMeta != null;
+        speedMeta.setBasePotionData(new PotionData(PotionType.FIRE_RESISTANCE));
+        speedIS.setItemMeta(speedMeta);
+        net.blockcade.Arcade.Utils.Formatting.Item speed = new net.blockcade.Arcade.Utils.Formatting.Item(speedIS, "&bSpeed");
+        speed.setLore(new String[]{
                 "&r",
-                "&7Cost: &64 Gold"
+                "&7Cost: &a1 Emerald",
+                "&r",
+                "&7Duration: &f30 Secs"
         });
-        water.setAmount(1);
-        water.setOnClick((Player p)-> {
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 4))
-                    p.getInventory().addItem(new ItemStack(WATER_BUCKET, 1));
+        speed.setAmount(1);
+        speed.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
+            public void run(Player p) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 1)) {
+                    ItemStack potion = new ItemStack(Material.POTION, 1);
+
+                    PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
+                    potionmeta.setMainEffect(PotionEffectType.JUMP);
+                    PotionEffect speed = new PotionEffect(PotionEffectType.JUMP, (30 * 20), 2);
+                    potionmeta.addCustomEffect(speed, true);
+                    potionmeta.setColor(Color.LIME);
+                    potionmeta.setDisplayName(Text.format("&bSpeed"));
+                    potion.setItemMeta(potionmeta);
+                    p.getInventory().addItem(potion);
+                }
+            }
         });
 
-        Item fireball = new Item(FIRE_CHARGE, "&bFireball");
-        fireball.setLore(new String[]{
-                "&r",
-                "&7Cost: &f40 Iron"
-        });
-        fireball.setAmount(1);
-        fireball.setOnClick((Player p)->{
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, IRON_INGOT, 40))
-                    p.getInventory().addItem(new ItemStack(FIRE_CHARGE, 1));
-        });
-
-        Item bridge_egg = new Item(EGG, "&bBridge Egg");
-        bridge_egg.setLore(new String[]{
-                "&r",
-                "&7Cost: &a3 Emeralds"
-        });
-        bridge_egg.setAmount(1);
-
-        bridge_egg.setOnClick((Player p)->{
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 3))
-                    p.getInventory().addItem(new ItemStack(EGG, 1));
-            });
-
-        Item golden_apple = new Item(GOLDEN_APPLE, "&bGolden Apple");
-        golden_apple.setLore(new String[]{
-                "&r",
-                "&7Cost: &63 Gold"
-        });
-        golden_apple.setAmount(1);
-        golden_apple.setOnClick((Player p)-> {
-                    if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 3))
-                        p.getInventory().addItem(new ItemStack(GOLDEN_APPLE, 1));
-        });
-
-        Item ender_chest = new Item(ENDER_CHEST, "&dPortable Enderchest");
-        ender_chest.setLore(new String[]{
-                "&r",
-                "&7Cost: &624 Gold",
-                "&r",
-                "&c&lONE USE"
-        });
-        ender_chest.setAmount(1);
-        ender_chest.setOnClick((Player p)->{if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, GOLD_INGOT, 24))
-            p.getInventory().addItem(new ItemStack(ENDER_CHEST, 1));
-        });
-
-        Item disabled = new Item(BARRIER, "&cItem Disabled");
+        net.blockcade.Arcade.Utils.Formatting.Item disabled = new net.blockcade.Arcade.Utils.Formatting.Item(BARRIER, "&cItem Disabled");
         disabled.setLore(new String[]{"&r","&fThis is has been disabled","&fin some cases this may be","&ftemporary, or due to technical issues.","&r","&6Check again later."});
         disabled.setOnClick((Player p)->player.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,1f));
 
         /*  X - Y */
-        /*  3 - 2 */ specials.shop.setItem(19,tnt.spigot());
-        /*  3 - 3 */ specials.shop.setItem(20,epearl.spigot());
+        /*  3 - 2 */ specials.shop.setItem(19, Item.SPECIAL_TNT.spigot());
+        /*  3 - 3 */ specials.shop.setItem(20, Item.SPECIAL_ENDER_PEARL.spigot());
 
         /*  3 - 5 */ specials.shop.setItem(22,disabled.spigot()); // SPAWN EGG
 
-        /*  3 - 7 */ specials.shop.setItem(24,disabled.spigot()); // POTION OF SPEED
-        /*  3 - 8 */ specials.shop.setItem(25,disabled.spigot()); // Magic Milk
+        /*  3 - 7 */ specials.shop.setItem(24,speed.spigot()); // POTION OF SPEED
+        /*  3 - 8 */ specials.shop.setItem(25,milk.spigot()); // Magic Milk
 
 
-        /*  4 - 2 */ specials.shop.setItem(28,water.spigot());
-        /*  4 - 3 */ specials.shop.setItem(29,fireball.spigot());
+        /*  4 - 2 */ specials.shop.setItem(28, Item.SPECIAL_WATER.spigot());
+        /*  4 - 3 */ specials.shop.setItem(29, Item.SPECIAL_FIREBALL.spigot());
 
         /*  4 - 5 */ specials.shop.setItem(31,disabled.spigot()); // SPAWN EGG
 
-        /*  4 - 7 */ specials.shop.setItem(33,disabled.spigot()); // POTION OF LEAPING
-        /*  4 - 8 */ specials.shop.setItem(34,golden_apple.spigot());
+        /*  4 - 7 */ specials.shop.setItem(33,jump.spigot()); // POTION OF LEAPING
+        /*  4 - 8 */ specials.shop.setItem(34, Item.SPECIAL_GOLDEN_APPLE.spigot());
 
 
-        /*  5 - 2 */ specials.shop.setItem(37,ender_chest.spigot());
-        /*  5 - 3 */ specials.shop.setItem(38,bridge_egg.spigot());
+        /*  5 - 2 */ specials.shop.setItem(37, Item.SPECIAL_ENDER_CHEST.spigot());
+        /*  5 - 3 */ specials.shop.setItem(38, Item.SPECIAL_BRIDGE_EGG.spigot());
 
         /*  5 - 5 */ specials.shop.setItem(40,disabled.spigot()); //SPAWN EGG
 
-        /*  5 - 7 */ specials.shop.setItem(42,disabled.spigot()); // PORTION OF INVISIBILITY
+        /*  5 - 7 */ specials.shop.setItem(42,invis.spigot()); // PORTION OF INVISIBILITY
         /*  X - Y */
 
         return specials.shop;

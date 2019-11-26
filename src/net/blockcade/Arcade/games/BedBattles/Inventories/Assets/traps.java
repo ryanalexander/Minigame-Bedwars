@@ -21,9 +21,8 @@ public class traps implements Listener {
     public static Inventory getShop(Game game, Player player){
 
         traps.shop= header.format(game, Bukkit.createInventory(null,9*6, Text.format("&cSecurity Systems")),false,0);
-
         BedTeam bedTeam = Main.teams.get(game.TeamManager().getTeam(player));
-
+        int trapCount = bedTeam.traps.size();
         Item close = new Item(Material.BARRIER, "&cBack");
         close.setOnClick(new Item.click() {
             @Override
@@ -33,13 +32,15 @@ public class traps implements Listener {
         });
 
         Item ALERT_TRAP = new Item(TeamTraps.ALERT.getItem(), TeamTraps.ALERT.getName());
-        ALERT_TRAP.setLore(new String[]{"",TeamTraps.ALERT.getDescription(),"","&7Cost: &b1 Diamond","",((player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? (bedTeam.getTraps().size()>=3)?"&aYou are fully armed":"&eClick to purchase" : "&cYou don't have enough Diamonds!"))});
+        ALERT_TRAP.setLore(new String[]{"",TeamTraps.ALERT.getDescription(),"","&7Cost: &b"+(trapCount+1)+" Diamond"+((trapCount+1)>1?"s":""),"",((player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? (bedTeam.getTraps().size()>=3)?"&aYou are fully armed":"&eClick to purchase" : "&cYou don't have enough Diamonds!"))});
         ALERT_TRAP.setOnClick(new Item.click() {
             @Override
             public void run(Player p) {
                 TeamColors team = game.TeamManager().getTeam(p);
+                BedTeam bedTeam = Main.teams.get(game.TeamManager().getTeam(p));
+                int trapCount = bedTeam.traps.size();
                 if (bedTeam.getTraps().size()>=3) return;
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.DIAMOND, 1)) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.DIAMOND, trapCount+1)) {
                     Main.teams.get(team).addTrap(TeamTraps.ALERT);
                     p.openInventory(getShop(game, p));
                 }
@@ -48,20 +49,21 @@ public class traps implements Listener {
 
 
         Item BLINDNESS_TRAP = new Item(TeamTraps.BLINDNESS.getItem(), TeamTraps.BLINDNESS.getName());
-        BLINDNESS_TRAP.setLore(new String[]{"",TeamTraps.BLINDNESS.getDescription(),"","&7Cost: &b1 Diamond","",((player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? (bedTeam.getTraps().size()>=3)?"&aYou are fully armed":"&eClick to purchase" : "&cYou don't have enough Diamonds!"))});
+        BLINDNESS_TRAP.setLore(new String[]{"",TeamTraps.BLINDNESS.getDescription(),"","&7Cost: &b"+(trapCount+1)+" Diamond"+((trapCount+1)>1?"s":""),"",((player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? (bedTeam.getTraps().size()>=3)?"&aYou are fully armed":"&eClick to purchase" : "&cYou don't have enough Diamonds!"))});
         BLINDNESS_TRAP.setOnClick(new Item.click() {
             @Override
             public void run(Player p) {
                 TeamColors team = game.TeamManager().getTeam(p);
+                BedTeam bedTeam = Main.teams.get(game.TeamManager().getTeam(p));
+                int trapCount = bedTeam.traps.size();
                 if (bedTeam.getTraps().size()>=3) return;
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.DIAMOND, 1)) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.DIAMOND, trapCount+1)) {
                     Main.teams.get(team).addTrap(TeamTraps.BLINDNESS);
                     p.openInventory(getShop(game, p));
                 }
             }
         });
 
-        shop.setItem(0,close.spigot());
         shop.setItem(10,ALERT_TRAP.spigot());
         shop.setItem(11,BLINDNESS_TRAP.spigot());
         return traps.shop;

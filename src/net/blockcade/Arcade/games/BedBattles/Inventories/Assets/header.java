@@ -14,7 +14,7 @@
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Utils.Formatting.Item;
+import net.blockcade.Arcade.games.BedBattles.Misc.Item;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -30,7 +30,7 @@ public class header {
     public static Inventory format(Game game, Inventory inv, boolean header, boolean hasquickbuy, int offset) {
         offset=offset-1;
 
-        ItemStack placeholder = new Item(Material.GRAY_STAINED_GLASS_PANE, "&r").setOnClick(new Item.click() {
+        ItemStack placeholder = new net.blockcade.Arcade.Utils.Formatting.Item(Material.GRAY_STAINED_GLASS_PANE, "&r").setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
             @Override
             public void run(Player param1Player) {
 
@@ -41,8 +41,8 @@ public class header {
         }
 
         if (header) {
-            Item quick_buy = new Item(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "&fQuick Buy");
-            quick_buy.setOnClick(new Item.click() {
+            net.blockcade.Arcade.Utils.Formatting.Item quick_buy = new net.blockcade.Arcade.Utils.Formatting.Item(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "&fQuick Buy");
+            quick_buy.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 @Override
                 public void run(Player p) {
                     p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO,0.5f,0.5f);
@@ -50,33 +50,33 @@ public class header {
             });
             quick_buy.setLore(new String[]{"&7To set this &bQuick Buy&7 slot","&7just &bShift + Click&7 and click","&7any item from the menu"});
 
-            Item Blocks = new Item(Material.OAK_PLANKS, "&6Blocks");
-            Item Weapons = new Item(Material.DIAMOND_SWORD, "&6Weapons");
-            Item Armor = new Item(Material.IRON_CHESTPLATE, "&6Armor");
-            Item Tools = new Item(Material.GOLDEN_PICKAXE, "&6Tools");
-            Item Special = new Item(Material.FIRE_CHARGE, "&6Specials");
+            net.blockcade.Arcade.Utils.Formatting.Item Blocks = new net.blockcade.Arcade.Utils.Formatting.Item(Material.OAK_PLANKS, "&6Blocks");
+            net.blockcade.Arcade.Utils.Formatting.Item Weapons = new net.blockcade.Arcade.Utils.Formatting.Item(Material.DIAMOND_SWORD, "&6Weapons");
+            net.blockcade.Arcade.Utils.Formatting.Item Armor = new net.blockcade.Arcade.Utils.Formatting.Item(Material.IRON_CHESTPLATE, "&6Armor");
+            net.blockcade.Arcade.Utils.Formatting.Item Tools = new net.blockcade.Arcade.Utils.Formatting.Item(Material.GOLDEN_PICKAXE, "&6Tools");
+            net.blockcade.Arcade.Utils.Formatting.Item Special = new net.blockcade.Arcade.Utils.Formatting.Item(Material.FIRE_CHARGE, "&6Specials");
 
-            Blocks.setOnClick(new Item.click() {
+            Blocks.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 public void run(Player p) {
                     p.openInventory(blocks.getShop(game, p));
                 }
             });
-            Weapons.setOnClick(new Item.click() {
+            Weapons.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 public void run(Player p) {
                     p.openInventory(weapons.getShop(game, p));
                 }
             });
-            Armor.setOnClick(new Item.click() {
+            Armor.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 public void run(Player p) {
                     p.openInventory(armor.getShop(game, p));
                 }
             });
-            Tools.setOnClick(new Item.click() {
+            Tools.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 public void run(Player p) {
                     p.openInventory(tools.getShop(game, p));
                 }
             });
-            Special.setOnClick(new Item.click() {
+            Special.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
                 public void run(Player p) {
                     p.openInventory(specials.getShop(game, p));
                 }
@@ -92,19 +92,22 @@ public class header {
              Quick buy slots
              */
             if(hasquickbuy) {
-                inv.setItem(28, quick_buy.spigot());
+                inv.setItem(28, Item.BLOCK_WOOL_WHITE.getItem().spigot());
                 inv.setItem(29, quick_buy.spigot());
-                inv.setItem(30, quick_buy.spigot());
-                inv.setItem(31, quick_buy.spigot());
-                inv.setItem(32, quick_buy.spigot());
+
+                inv.setItem(31, Item.SPECIAL_GOLDEN_APPLE.getItem().spigot());
+
                 inv.setItem(33, quick_buy.spigot());
                 inv.setItem(34, quick_buy.spigot());
 
+
+                inv.setItem(37, quick_buy.spigot());
                 inv.setItem(38, quick_buy.spigot());
-                inv.setItem(39, quick_buy.spigot());
+
                 inv.setItem(40, quick_buy.spigot());
-                inv.setItem(41, quick_buy.spigot());
+
                 inv.setItem(42, quick_buy.spigot());
+                inv.setItem(43, quick_buy.spigot());
             }
         }
 

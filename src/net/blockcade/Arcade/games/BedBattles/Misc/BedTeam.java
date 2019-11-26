@@ -27,6 +27,7 @@
 package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Variables.TeamTraps;
@@ -47,6 +48,8 @@ public class BedTeam {
 
     public HashMap<TeamUpgrades, Integer> upgrades = new HashMap<>();
     public ArrayList<TeamTraps> traps = new ArrayList<>();
+
+    public ScoreboardManager scoreboardManager;
 
     public Chest chest;
 
@@ -99,6 +102,14 @@ public class BedTeam {
 
     public Inventory getEnderchest() {
         return Enderchest;
+    }
+
+    public void setScoreboardManager(ScoreboardManager scoreboardManager) {
+        this.scoreboardManager = scoreboardManager;
+    }
+
+    public ScoreboardManager getScoreboardManager() {
+        return scoreboardManager;
     }
 
     public ArrayList<TeamTraps> getTraps() {

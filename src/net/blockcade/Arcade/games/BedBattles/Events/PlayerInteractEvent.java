@@ -10,6 +10,7 @@ import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Rotation;
+import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -17,16 +18,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
 
 import static net.blockcade.Arcade.games.BedBattles.Main.chests;
+import static net.blockcade.Arcade.games.BedBattles.Main.trap_immunity;
 
 public class PlayerInteractEvent implements Listener {
 
     Game game;
+
     public PlayerInteractEvent(Game game){this.game=game;}
 
     @EventHandler
@@ -51,6 +56,9 @@ public class PlayerInteractEvent implements Listener {
         if(e.getItem()!=null){
             TeamColors team = game.TeamManager().getTeam(e.getPlayer());
             switch(e.getItem().getType()){
+                case WATER_BUCKET:
+                    e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount()-1);
+                    break;
                 case ENDER_CHEST:
                     e.getPlayer().openInventory(Main.teams.get(game.TeamManager().getTeam(e.getPlayer())).getEnderchest());
                     e.getItem().setAmount(e.getItem().getAmount()-1);
@@ -96,12 +104,18 @@ public class PlayerInteractEvent implements Listener {
                                     public void run() {
                                         for(int i=0;i<2;i++){
                                             Material team_wool = Material.valueOf((team.getTranslation()+"_WOOL").toUpperCase());
-                                            game.BlockManager().update(l.clone().add(i,0,0),l.clone().add(i,0,0).getBlock().getType(),l.clone().add(i,0,0).getBlock().getBlockData());
-                                            game.BlockManager().update(l.clone().add(0,i,0),l.clone().add(0,i,0).getBlock().getType(),l.clone().add(0,i,0).getBlock().getBlockData());
-                                            game.BlockManager().update(l.clone().add(0,0,i),l.clone().add(0,0,i).getBlock().getType(),l.clone().add(0,0,i).getBlock().getBlockData());
-                                            l.clone().add(i,0,0).getBlock().setType(team_wool);
-                                            l.clone().add(0,i,0).getBlock().setType(team_wool);
-                                            l.clone().add(0,0,i).getBlock().setType(team_wool);
+                                            if(l.clone().add(i,0,0).getBlock().getType().equals(Material.AIR)) {
+                                                l.clone().add(i,0,0).getBlock().setType(team_wool);
+                                                game.BlockManager().update(l.clone().add(i,0,0),l.clone().add(i,0,0).getBlock().getType(),l.clone().add(i,0,0).getBlock().getBlockData());
+                                            }
+                                            if(l.clone().add(0,0,0).getBlock().getType().equals(Material.AIR)){
+                                                l.clone().add(0,0,0).getBlock().setType(team_wool);
+                                                game.BlockManager().update(l.clone().add(0,0,0),l.clone().add(0,0,0).getBlock().getType(),l.clone().add(0,i,0).getBlock().getBlockData());
+                                            }
+                                            if(l.clone().add(0,0,i).getBlock().getType().equals(Material.AIR)){
+                                                l.clone().add(0,0,i).getBlock().setType(team_wool);
+                                                game.BlockManager().update(l.clone().add(0,0,i),l.clone().add(0,0,i).getBlock().getType(),l.clone().add(0,i,0).getBlock().getBlockData());
+                                            }
                                         }
                                     }
                                 }.runTaskLater(Main.getPlugin(Main.class),2L);
@@ -116,14 +130,36 @@ public class PlayerInteractEvent implements Listener {
     }
 
     @EventHandler
+    public void PlayerConsume(PlayerItemConsumeEvent e){
+        if(e.getItem().getType().equals(Material.MILK_BUCKET)){
+            e.setCancelled(true);
+            e.getItem().setAmount(e.getItem().getAmount()-1);
+            trap_immunity.add(e.getPlayer());
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    trap_immunity.remove(e.getPlayer());
+                }
+            }.runTaskLaterAsynchronously(game.handler(),(30*20));
+        }
+    }
+
+    @EventHandler
     public void ProjectileHitEvent(ProjectileHitEvent e){
         switch (e.getEntity().getType()){
             case FIREBALL:
-                Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld().createExplosion(e.getHitBlock().getLocation(),0,true);
-                TNTPrimed tnt = (TNTPrimed)Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld().spawnEntity(e.getHitBlock().getLocation(),EntityType.PRIMED_TNT);
-                tnt.setFuseTicks(0);
+                Objects.requireNonNull(Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld()).createExplosion(e.getHitBlock().getLocation(),2,false);
+                Objects.requireNonNull(Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld()).createExplosion(e.getEntity().getLocation(),2,false);
+                break;
+            case ENDER_PEARL:
+                e.getHitBlock().getLocation().getWorld().playSound(e.getHitBlock().getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP,1f,0f);
                 break;
         }
+    }
+
+    @EventHandler
+    public void WaterPlace(PlayerBucketEmptyEvent e){
+        e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
     }
 
     @EventHandler

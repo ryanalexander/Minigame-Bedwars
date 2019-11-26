@@ -28,6 +28,8 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Main;
+import net.blockcade.Arcade.Utils.Formatting.Text;
+import net.blockcade.Arcade.Utils.GameUtils.Hologram;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -43,10 +45,14 @@ public class Forge {
     private Material material;
     private Game game;
     private boolean stopped = false;
+    private boolean hasSummary = false;
+    private Hologram hologram;
     private int max_material=0;
     private int amount;
     private long speed;
     private long base_speed;
+
+    private String title="";
 
     /**
      * @param game     Game object
@@ -54,13 +60,16 @@ public class Forge {
      * @param material Bukkit material that should drop
      * @param speed    How many ticks should pass between each drop
      */
-    public Forge(Game game, Location location, Material material, long speed, boolean hasSummary, int max_material) {
+    public Forge(Game game, Location location, Material material, long speed, boolean hasSummary, int max_material, String title) {
+        this.game=game;
         this.location = location;
         this.material = material;
         this.amount = 1;
-        this.max_material = max_material-2;
+        this.max_material = max_material-1;
         this.speed = speed;
         this.base_speed = speed;
+        this.hasSummary = hasSummary;
+        this.title=title!=null?title:"";
         this.run();
     }
 
@@ -146,6 +155,8 @@ public class Forge {
     }
 
     private void run() {
+        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3.25,0),new String[]{Text.format(title)});
+        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3,0),new String[]{"&fDropping in &e%s&f second%s"});
         Forge f = this;
         new BukkitRunnable() {
             Forge forge = f;
@@ -157,8 +168,10 @@ public class Forge {
                     return;
                 }
                 i=i+5;
+                int time = (int) ((forge.speed-i)/20);
+                if(!hasSummary) if(hologram!=null)hologram.editLine(0,String.format(hologram.getLines()[0],time,time>1?"s":""));
                 if(i>=forge.speed){
-                    if(getEntitiesAroundPoint(location,10,new ItemStack(material))<=max_material)drop();
+                    if(getEntitiesAroundPoint(location,16,new ItemStack(material))<=max_material)drop();
                     i=0;
                 }
             }

@@ -76,7 +76,7 @@ public class SpinningBlock {
         this.e.setMarker(false);
         this.e.getEquipment().setHelmet(skull);
         this.e.setCustomName(Text.format(text));
-        this.e.setCustomNameVisible(true);
+        this.e.setCustomNameVisible(false);
         this.e.setSmall(is_Small);
 
         new BukkitRunnable() {
