@@ -145,7 +145,7 @@ public enum Item {
             player.getInventory().addItem(new ItemStack(Material.END_STONE,12));
     },12),
     BLOCK_OBSIDIAN(OBSIDIAN, "&bObsidian", new String[]{"&r","&7Cost: &a4 Emeralds","&r","&dBlast Proof"}, player -> {
-        if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(player, Material.IRON_INGOT, 24))
+        if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(player, EMERALD, 4))
             player.getInventory().addItem(new ItemStack(Material.END_STONE,12));
     },12),
 
@@ -202,9 +202,9 @@ public enum Item {
 
     // Armor Menu
     ARMOR_CHAINMAIL(CHAINMAIL_CHESTPLATE,"&7Chainmail Armor", new String[]{"&r","&7Cost: &f40 Iron"}, player -> {
-        if(player.getInventory().containsAtLeast(new ItemStack(DIAMOND_LEGGINGS),1)
-                ||player.getInventory().containsAtLeast(new ItemStack(IRON_LEGGINGS),1)
-                ||player.getInventory().containsAtLeast(new ItemStack(CHAINMAIL_LEGGINGS),1)
+        if(player.getInventory().contains(DIAMOND_LEGGINGS)
+                ||player.getInventory().contains(IRON_LEGGINGS)
+                ||player.getInventory().contains(CHAINMAIL_LEGGINGS)
         ){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
@@ -216,7 +216,8 @@ public enum Item {
         }
     }),
     ARMOR_IRON(IRON_CHESTPLATE, "&bIron Armor", new String[]{"&r","&7Cost: &612 Gold"}, player -> {
-        if(player.getInventory().containsAtLeast(new ItemStack(DIAMOND_LEGGINGS),1)||player.getInventory().containsAtLeast(new ItemStack(IRON_LEGGINGS),1)){
+        if(player.getInventory().contains(DIAMOND_LEGGINGS)
+                ||player.getInventory().contains(IRON_LEGGINGS)){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
         }
@@ -227,7 +228,7 @@ public enum Item {
         }
     }),
     ARMOR_DIAMOND(DIAMOND_CHESTPLATE, "&bDiamond Chestplate", new String[]{"&r","&7Cost: &a6 Emeralds"}, player -> {
-        if(player.getInventory().containsAtLeast(new ItemStack(DIAMOND_LEGGINGS),1)){
+        if(player.getInventory().contains(DIAMOND_LEGGINGS)){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
         }

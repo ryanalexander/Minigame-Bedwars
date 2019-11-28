@@ -28,6 +28,7 @@ package net.blockcade.Arcade.games.BedBattles.Events;
 
 import com.google.common.collect.Lists;
 import net.blockcade.Arcade.Game;
+import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Utils.JavaUtils;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades;
@@ -64,6 +65,22 @@ public class PlayerRespawnEvent implements Listener {
 
             Material axe = tools.previousUpgrade(materials, ItemUpgrades.AXE);
             Material pickaxe = tools.previousUpgrade(materials, ItemUpgrades.PICKAXE);
+
+            if(e.getKiller()!=null){
+                int emeralds = 0;
+                int diamonds = 0;
+                for(ItemStack is : e.getInventoryContents()){
+                    if(is==null)continue;
+                    if(is.getType().equals(Material.EMERALD))emeralds=emeralds+is.getAmount();
+                    if(is.getType().equals(Material.DIAMOND))diamonds=diamonds+is.getAmount();
+                }
+
+                if(emeralds>0||diamonds>0) {
+                    Text.sendMessage(e.getKiller(), Text.format("&eFor killing %s&e you received:",e.getPlayer().getDisplayName()), Text.MessageType.TEXT_CHAT);
+                    if(emeralds>0)Text.sendMessage(e.getKiller(), Text.format("&a+ %s Emeralds",emeralds+""), Text.MessageType.TEXT_CHAT);
+                    if(diamonds>0)Text.sendMessage(e.getKiller(), Text.format("&b+ %s Diamonds",diamonds+""), Text.MessageType.TEXT_CHAT);
+                }
+            }
 
             if(axe!=null){
                 ItemStack is = new ItemStack(axe);
