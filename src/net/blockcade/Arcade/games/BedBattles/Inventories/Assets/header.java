@@ -23,11 +23,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class header {
 
-    public static Inventory format(Game game, Inventory inv, boolean header, int offset) {
-        return format(game,inv,header,false,offset);
+    public static Inventory format(Game game, Player p, Inventory inv, boolean header, int offset) {
+        return format(game,p,inv,header,false,offset);
     }
 
-    public static Inventory format(Game game, Inventory inv, boolean header, boolean hasquickbuy, int offset) {
+    public static Inventory format(Game game, Player p, Inventory inv, boolean header, boolean hasquickbuy, int offset) {
         offset=offset-1;
 
         ItemStack placeholder = new net.blockcade.Arcade.Utils.Formatting.Item(Material.GRAY_STAINED_GLASS_PANE, "&r").setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
@@ -92,7 +92,7 @@ public class header {
              Quick buy slots
              */
             if(hasquickbuy) {
-                inv.setItem(28, Item.BLOCK_WOOL_WHITE.getItem().spigot());
+                inv.setItem(28, Item.valueOf("BLOCK_WOOL_"+game.TeamManager().getTeam(p).name()).getItem().spigot());
                 inv.setItem(29, quick_buy.spigot());
 
                 inv.setItem(31, Item.SPECIAL_GOLDEN_APPLE.getItem().spigot());

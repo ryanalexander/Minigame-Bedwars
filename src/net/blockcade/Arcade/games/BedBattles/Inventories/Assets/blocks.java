@@ -27,7 +27,7 @@ public class blocks implements Listener {
     private static Inventory shop;
 
     public static Inventory getShop(Game game, Player player) {
-        blocks.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cBuilding Materials")), true,0);
+        blocks.shop = header.format(game,player, Bukkit.createInventory(null, 9 * 6, Text.format("&cBuilding Materials")), true,0);
 
         blocks.shop.setItem(20, Item.valueOf("BLOCK_WOOL_"+game.TeamManager().getTeam(player).name().toUpperCase()).spigot());
         blocks.shop.setItem(22, Item.valueOf("BLOCK_CLAY_"+game.TeamManager().getTeam(player).name().toUpperCase()).spigot());

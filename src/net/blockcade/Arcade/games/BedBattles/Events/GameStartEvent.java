@@ -14,7 +14,6 @@
 package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Game;
-import net.blockcade.Arcade.Managers.EntityManager;
 import net.blockcade.Arcade.Managers.GamePlayer;
 import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Utils.Formatting.Text;
@@ -45,6 +44,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static net.blockcade.Arcade.games.BedBattles.Main.forges;
 import static net.blockcade.Arcade.games.BedBattles.Main.scoreboard_upgrade_offsets;
@@ -60,122 +60,7 @@ public class GameStartEvent implements Listener {
     @EventHandler
     public void GameStartEvent(net.blockcade.Arcade.Managers.EventManager.GameStartEvent e) {
 
-        for (TeamColors team : game.TeamManager().getActive_teams()) {
-            BedTeam teamb = new BedTeam(game, team);
-
-            for(Player player : game.TeamManager().getTeamPlayers(team)) {
-                new BedPlayer(player);
-                // Create team scoreboard
-                ScoreboardManager sm = new ScoreboardManager("G" + player.getName(), game);
-                sm.setGamePlayer(GamePlayer.getGamePlayer(player));
-                sm.registerPlaceholder(new ScoreboardManager.placeholder() {
-                    @Override
-                    public int Integer(GamePlayer player) {
-                        return BedPlayer.getBedPlayer(player).getBedDestroys();
-                    }
-                },":BED_DESTROYS:");
-                sm.enableHealthCounter();
-                String name = "  BedBattles  ";
-                sm.setDisplayname(name);
-                scoreboard_upgrade_offsets.put(team, sm.addLine("%s in %s Seconds"));
-                sm.addBlank();
-                for (TeamColors teamColor : TeamColors.values()) {
-                    sm.addLine(teamColor.getChatColor() + teamColor.name().substring(0, 1) + "&r " + teamColor.name().substring(0, 1).toUpperCase() + teamColor.name().substring(1).toLowerCase() + String.format(" :ELIMINATED_%s: ", teamColor.name()) + (teamColor == team ? "&7You" : ""));
-                }
-                sm.addBlank();
-                sm.addLine("&fKills: &a:KILLS:");
-                sm.addLine("&fEliminations: &a:ELIMINATIONS:");
-                sm.addLine("&fBeds Destroyed: &a:BED_DESTROYS:");
-                sm.addBlank();
-                sm.addLine(JavaUtils.center("&dblockcade.net", sm.longest_line));
-
-                sm.update();
-                sm.showFor(player);
-
-                teamb.setScoreboardManager(sm);
-
-                // Give required armor
-                player.getInventory().setArmorContents(game.TeamManager().getArmor(team));
-            }
-
-            // Spawn item shop
-            Location shoploc = game.TeamManager().getConfigLocation("shop", team);
-            LivingEntity _shop = (LivingEntity) shoploc.getWorld().spawnEntity(shoploc, EntityType.VILLAGER);
-            _shop.setCustomName(Text.format(team.getChatColor() + team.name() + "'s Shopkeeper"));
-            _shop.setCustomNameVisible(true);
-            _shop.setInvulnerable(true);
-            _shop.setAI(false);
-            _shop.setSilent(true);
-            _shop.setCollidable(false);
-
-            game.EntityManager().AddGameEntity(_shop);
-            game.EntityManager().setFunction(_shop, new EntityManager.click() {
-                @Override
-                public void run(Player player) {
-                    if (player != null) {
-                        player.openInventory((new shop()).getShop(game, player));
-                    }
-                }
-            });
-
-            // Spawn team shop
-            Location tshoploc = game.TeamManager().getConfigLocation("team_shop", team);
-            LivingEntity _tshop = (LivingEntity) tshoploc.getWorld().spawnEntity(tshoploc, EntityType.VILLAGER);
-            _tshop.setCustomName(Text.format(team.getChatColor() + team.name() + "'s Team shop"));
-            _tshop.setCustomNameVisible(true);
-            _tshop.setInvulnerable(true);
-            _tshop.setAI(false);
-            _tshop.setSilent(true);
-            _tshop.setCollidable(false);
-
-            game.EntityManager().AddGameEntity(_tshop);
-            game.EntityManager().setFunction(_tshop, new EntityManager.click() {
-                @Override
-                public void run(Player player) {
-                    if (player != null) {
-                        player.openInventory((new team_shop()).getShop(game, player));
-                    }
-                }
-            });
-
-            Block _chest = game.TeamManager().getConfigLocation("chest",team).getBlock();
-            _chest.setType(Material.CHEST);
-            Chest chest = (Chest)_chest.getState();
-            teamb.setChest(chest);
-            chest.getBlockInventory().clear();
-
-
-            Block bed = game.TeamManager().getConfigLocation("bed", team).getBlock();
-            BlockFace direction = JavaUtils.direction((float)game.TeamManager().getConfigInt("bed.yaw", team));
-            bed.setType(Material.RED_BED);
-            Bed blockData = (Bed) bed.getBlockData();
-            blockData.setPart(Bed.Part.FOOT);
-            blockData.setFacing(direction);
-            bed.setBlockData(blockData);
-
-            org.bukkit.block.Block relative = bed.getRelative(direction);
-            relative.setType(Material.RED_BED, false);
-            Bed relativeBlockData = (Bed) relative.getBlockData();
-            relativeBlockData.setPart(Bed.Part.HEAD);
-            relativeBlockData.setFacing(direction);
-            relative.setBlockData(relativeBlockData);
-
-            teamb.setBed(bed);
-
-            Main.chests.put(chest,teamb);
-            Main.beds.put(bed,teamb);
-
-
-            // Create Forges
-            Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (2 * 20), true,40,null);
-            Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (8 * 20), true,20,null);
-
-            teamb.setIron_forge(iron_forge);
-            teamb.setGold_forge(gold_forge);
-
-            Main.teams.put(team, teamb);
-        }
-
+        // Send GameStart message
         Bukkit.broadcastMessage(Text.format("&d&m&l============================="));
         Bukkit.broadcastMessage(Text.format(JavaUtils.center("&f&lBed Battles", 42 + (4))));
         Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lProtect your bed and destroy the enemy beds.", 41 + (4))));
@@ -183,6 +68,115 @@ public class GameStartEvent implements Listener {
         Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lIron, Gold, Emerald and Diamond from generators", 41 + (4))));
         Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lto access powerful upgrades.", 41 + (4))));
         Bukkit.broadcastMessage(Text.format("&d&m&l============================="));
+
+        for(Player player : Bukkit.getOnlinePlayers()){
+            // Register BedPlayer object (Also creates GamePlayer)
+            BedPlayer bPlayer = new BedPlayer(player);
+
+            // Scoreboard //
+            ScoreboardManager sm = new ScoreboardManager("G" + player.getName(), game);
+            sm.setGamePlayer(bPlayer);
+            sm.registerPlaceholder(new ScoreboardManager.placeholder() {
+                @Override
+                public int Integer(GamePlayer player) {
+                    return BedPlayer.getBedPlayer(player).getBedDestroys();
+                }
+            },":BED_DESTROYS:");
+            sm.enableHealthCounter();
+            String name = "  BedBattles  ";
+            sm.setDisplayname(name);
+            scoreboard_upgrade_offsets.put(sm, sm.addLine("%s in %s Seconds"));
+            sm.addBlank();
+            for (TeamColors teamColor : TeamColors.values()) {
+                sm.addLine(teamColor.getChatColor() + teamColor.name().substring(0, 1) + "&r " + teamColor.name().substring(0, 1).toUpperCase() + teamColor.name().substring(1).toLowerCase() + String.format(" :ELIMINATED_%s: ", teamColor.name()) + (teamColor == bPlayer.getTeam() ? "&7You" : ""));
+            }
+            sm.addBlank();
+            sm.addLine("&fKills: &a:KILLS:");
+            sm.addLine("&fEliminations: &a:ELIMINATIONS:");
+            sm.addLine("&fBeds Destroyed: &a:BED_DESTROYS:");
+            sm.addBlank();
+            sm.addLine("   &dblockcade.net   ");
+
+            sm.showFor(player);
+
+            player.teleport(game.TeamManager().getSpawn(bPlayer.getTeam()));
+            player.getInventory().setArmorContents(game.TeamManager().getArmor(bPlayer.getTeam()));
+        }
+
+
+
+        for (TeamColors team : TeamColors.values()) {
+            BedTeam bedTeam = null;
+            if(game.TeamManager().getActive_teams().contains(team))bedTeam=new BedTeam(game, team);
+
+            // Spawn item shop
+            Location shoploc = game.TeamManager().getConfigLocation("shop", team);
+            LivingEntity _shop = (LivingEntity) Objects.requireNonNull(shoploc.getWorld()).spawnEntity(shoploc, EntityType.VILLAGER);
+            _shop.setCustomName(Text.format("Shopkeeper"));
+            _shop.setCustomNameVisible(true);
+            _shop.setInvulnerable(true);
+            _shop.setAI(false);
+            _shop.setSilent(true);
+            _shop.setCollidable(false);
+
+            game.EntityManager().AddGameEntity(_shop);
+            game.EntityManager().setFunction(_shop,(p)-> p.openInventory((new shop()).getShop(game, p)));
+
+            // Spawn team shop
+            Location tshoploc = game.TeamManager().getConfigLocation("team_shop", team);
+            LivingEntity _tshop = (LivingEntity) tshoploc.getWorld().spawnEntity(tshoploc, EntityType.VILLAGER);
+            _tshop.setCustomName(Text.format("Team shop"));
+            _tshop.setCustomNameVisible(true);
+            _tshop.setInvulnerable(true);
+            _tshop.setAI(false);
+            _tshop.setSilent(true);
+            _tshop.setCollidable(false);
+
+            game.EntityManager().AddGameEntity(_tshop);
+            game.EntityManager().setFunction(_tshop, (p)->p.openInventory((new team_shop()).getShop(game, p)));
+
+            if(bedTeam!=null) {
+
+                // Real Team Functions
+
+                // Spawn Chest
+                Block _chest = game.TeamManager().getConfigLocation("chest", team).getBlock();
+                _chest.setType(Material.CHEST);
+                Chest chest = (Chest) _chest.getState();
+                bedTeam.setChest(chest);
+                chest.getBlockInventory().clear();
+
+                // Spawn Bed
+                Block bed = game.TeamManager().getConfigLocation("bed", team).getBlock();
+                BlockFace direction = JavaUtils.direction((float)game.TeamManager().getConfigInt("bed.yaw", team));
+                bed.setType(Material.RED_BED);
+                Bed blockData = (Bed) bed.getBlockData();
+                blockData.setPart(Bed.Part.FOOT);
+                blockData.setFacing(direction);
+                bed.setBlockData(blockData);
+
+                org.bukkit.block.Block relative = bed.getRelative(direction);
+                relative.setType(Material.RED_BED, false);
+                Bed relativeBlockData = (Bed) relative.getBlockData();
+                relativeBlockData.setPart(Bed.Part.HEAD);
+                relativeBlockData.setFacing(direction);
+                relative.setBlockData(relativeBlockData);
+
+                bedTeam.setBed(bed);
+
+                Main.chests.put(chest,bedTeam);
+                Main.beds.put(bed,bedTeam);
+
+                // Spawn Forges
+                Forge iron_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.IRON_INGOT, (2 * 20), true,40,null);
+                Forge gold_forge = new Forge(game, game.TeamManager().getConfigLocation("forge", team), Material.GOLD_INGOT, (8 * 20), true,20,null);
+
+                bedTeam.setIron_forge(iron_forge);
+                bedTeam.setGold_forge(gold_forge);
+
+                Main.teams.put(team, bedTeam);
+            }
+        }
 
         forges.put(Material.DIAMOND,new ArrayList<>());
         forges.put(Material.EMERALD,new ArrayList<>());
@@ -214,10 +208,10 @@ public class GameStartEvent implements Listener {
                 if(GameUpgrades.events[level].getTime()==timer){
                     GameUpgrades.actions[level].run();
                     level++;
-                    timer=0;
+                    timer=1;
                 }else {
-                    for(Map.Entry<TeamColors, Integer> payload : scoreboard_upgrade_offsets.entrySet()){
-                        ScoreboardManager sm = Main.teams.get(payload.getKey()).getScoreboardManager();
+                    for(Map.Entry<ScoreboardManager, Integer> payload : scoreboard_upgrade_offsets.entrySet()){
+                        ScoreboardManager sm = payload.getKey();
                         long i = ((GameUpgrades.events[level].getTime()-timer)/20)*1000;
                         long SECONDS = JavaUtils.FormatMS(i, JavaUtils.TimeUnit.SECOND);
                         long MINUTES = Math.round(SECONDS/60);
@@ -227,10 +221,10 @@ public class GameStartEvent implements Listener {
                         sm.editLine(payload.getValue()+1,GameUpgrades.events[level].getName());
                         sm.editLine(payload.getValue(),String.format("&e%s:&e%s",MINUTES_FORMATTED,SECONDS_FORMATTED));
                     }
-                    timer++;
+                    timer=timer+20;
                 }
             }
-        }.runTaskTimer(Main.getPlugin(Main.class),0L,1L);
+        }.runTaskTimerAsynchronously(Main.getPlugin(Main.class),0L,20L);
     }
 
 

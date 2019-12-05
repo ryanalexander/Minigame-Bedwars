@@ -16,6 +16,7 @@ package net.blockcade.Arcade.games.BedBattles;
 import net.blockcade.Arcade.Commands.GameCommand;
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Managers.GamePlayer;
+import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Varables.*;
 import net.blockcade.Arcade.games.BedBattles.Events.*;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
@@ -35,7 +36,7 @@ import java.util.HashMap;
 public class Main extends JavaPlugin {
 
     public static HashMap<TeamColors, BedTeam> teams = new HashMap<>();
-    public static HashMap<TeamColors, Integer> scoreboard_upgrade_offsets = new HashMap<>();
+    public static HashMap<ScoreboardManager, Integer> scoreboard_upgrade_offsets = new HashMap<>();
     public static ArrayList<Player> trap_immunity = new ArrayList<>();
     public static HashMap<Material, ArrayList<Forge>> forges = new HashMap<>();
     public static HashMap<Block, BedTeam> beds = new HashMap<>();

@@ -39,6 +39,7 @@ public class PlayerInteractEvent implements Listener {
         e.getPlayer().getInventory().getItemInMainHand().setDurability((short)0);
         if(Spectator.isSpectator(e.getPlayer())){e.setCancelled(true);return;}
         if(!game.GameState().equals(GameState.IN_GAME))return;
+        if(e.getClickedBlock()!=null&&e.getClickedBlock().getType().name().contains("BED"))e.setCancelled(true);
         if(e.getClickedBlock()!=null&&e.getClickedBlock().getType().equals(Material.ENDER_CHEST)){
             e.getPlayer().openInventory(Main.teams.get(game.TeamManager().getTeam(e.getPlayer())).getEnderchest());
             e.setUseItemInHand(Event.Result.DENY);
@@ -196,5 +197,6 @@ public class PlayerInteractEvent implements Listener {
     @EventHandler
     public void SilverfishTarget(EntityTargetEvent e){
         if(e.getEntityType().equals(EntityType.SILVERFISH))e.setCancelled(true);
+        if(e.getEntityType().equals(EntityType.WITHER))e.setCancelled(true);
     }
 }

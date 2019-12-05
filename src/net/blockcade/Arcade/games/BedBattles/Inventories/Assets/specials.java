@@ -65,7 +65,7 @@ public class specials implements Listener {
     private static Inventory shop;
 
     public static Inventory getShop(Game game, Player player) {
-        specials.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cMy little friends'")), true,0);
+        specials.shop = header.format(game,player, Bukkit.createInventory(null, 9 * 6, Text.format("&cMy little friends'")), true,0);
 
         ItemStack invisIS = new ItemStack(POTION);
         PotionMeta invisMeta = (PotionMeta)invisIS.getItemMeta();

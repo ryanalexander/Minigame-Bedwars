@@ -35,7 +35,7 @@ public class shop implements Listener {
     // 11,12,13,14,15,16,17,29,30,31,33,34,35,38,39
 
     public Inventory getShop(Game game, Player player) {
-        this.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully")), true,true,9);
+        this.shop = header.format(game, player, Bukkit.createInventory(null, 9 * 6, Text.format("&cSkully")), true,true,9);
 
         this.menus.add(this.shop);
         return this.shop;

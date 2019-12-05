@@ -9,9 +9,11 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Bed;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class GameUpgrades {
 
@@ -54,11 +56,16 @@ public class GameUpgrades {
             },
             () -> {
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
-                    Block bed = payload.getKey();
-                    Bed blockData = (Bed) bed.getBlockData();
-                    org.bukkit.block.Block relative = bed.getRelative(blockData.getFacing());
-                    bed.setType(Material.AIR);
-                    relative.setType(Material.AIR, false);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            Block bed = payload.getKey();
+                            Bed blockData = (Bed) bed.getBlockData();
+                            org.bukkit.block.Block relative = bed.getRelative(blockData.getFacing());
+                            bed.setType(Material.AIR);
+                            relative.setType(Material.AIR, false);
+                        }
+                    }.runTask(Main.game.handler());
                     Main.game.TeamManager().setCantRespawn(payload.getValue().getTeam(),true);
                     for(Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())){
                         Text.sendMessage(player,"&c&lBed Destroyed", Text.MessageType.TITLE);
@@ -70,6 +77,28 @@ public class GameUpgrades {
             },
             ()-> {
                 Bukkit.broadcastMessage("Sudden Death");
+                for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
+                    if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
+
+                    Wither wither = (Wither) Main.game.map().spawnEntity(payload.getKey().getLocation().add(0,12,0), EntityType.WITHER);
+                    wither.setCustomName(payload.getValue().getTeam().formatted());
+                    wither.setCustomNameVisible(true);
+
+                    new BukkitRunnable(){
+                        boolean i = false;
+                        @Override
+                        public void run() {
+                            if(i){wither.setTarget(null);i=false;return;}
+                            for(Entity entity: Objects.requireNonNull(wither.getLocation().getWorld()).getNearbyEntities(wither.getLocation(),500,500,500)){
+                                if(!(entity instanceof Player))continue;
+                                if(!Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam()).contains(entity)){
+                                    wither.setTarget((LivingEntity) entity);
+                                    i=true;
+                                }
+                            }
+                        }
+                    }.runTaskTimer(Main.getPlugin(Main.class),0L,60L);
+                }
             },
             () -> {
                 Main.game.stop(true);

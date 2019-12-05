@@ -20,7 +20,7 @@ public class traps implements Listener {
 
     public static Inventory getShop(Game game, Player player){
 
-        traps.shop= header.format(game, Bukkit.createInventory(null,9*6, Text.format("&cSecurity Systems")),false,0);
+        traps.shop= header.format(game, player,Bukkit.createInventory(null,9*6, Text.format("&cSecurity Systems")),false,0);
         BedTeam bedTeam = Main.teams.get(game.TeamManager().getTeam(player));
         int trapCount = bedTeam.traps.size();
         Item close = new Item(Material.BARRIER, "&cBack");

@@ -55,7 +55,7 @@ public class weapons implements Listener {
     private static Inventory shop;
 
     public static Inventory getShop(Game game, Player player) {
-        weapons.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cWeapons of minimal destruction")), true,0);
+        weapons.shop = header.format(game,player, Bukkit.createInventory(null, 9 * 6, Text.format("&cWeapons of minimal destruction")), true,0);
 
         weapons.shop.setItem(28, Item.WEAPON_STONE_SWORD.spigot());
         weapons.shop.setItem(29, Item.WEAPON_IRON_SWORD.spigot());

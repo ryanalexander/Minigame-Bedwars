@@ -53,7 +53,7 @@ public class armor implements Listener {
     private static Inventory shop;
 
     public static Inventory getShop(Game game, Player player) {
-        armor.shop = header.format(game, Bukkit.createInventory(null, 9 * 6, Text.format("&cFancy Clothing Line")), true,0);
+        armor.shop = header.format(game,player, Bukkit.createInventory(null, 9 * 6, Text.format("&cFancy Clothing Line")), true,0);
 
         armor.shop.setItem(29, Item.ARMOR_CHAINMAIL.spigot());
         armor.shop.setItem(31, Item.ARMOR_IRON.spigot());

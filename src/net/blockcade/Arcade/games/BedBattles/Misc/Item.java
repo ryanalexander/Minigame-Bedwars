@@ -10,6 +10,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Objects;
+
 import static net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge;
 import static org.bukkit.Material.*;
 
@@ -202,9 +204,9 @@ public enum Item {
 
     // Armor Menu
     ARMOR_CHAINMAIL(CHAINMAIL_CHESTPLATE,"&7Chainmail Armor", new String[]{"&r","&7Cost: &f40 Iron"}, player -> {
-        if(player.getInventory().contains(DIAMOND_LEGGINGS)
-                ||player.getInventory().contains(IRON_LEGGINGS)
-                ||player.getInventory().contains(CHAINMAIL_LEGGINGS)
+        if(Objects.requireNonNull(player.getInventory().getBoots()).getType()==(DIAMOND_BOOTS)
+                ||Objects.requireNonNull(player.getInventory().getBoots()).getType()==(IRON_BOOTS)
+                ||Objects.requireNonNull(player.getInventory().getBoots()).getType()==(CHAINMAIL_BOOTS)
         ){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
@@ -216,8 +218,9 @@ public enum Item {
         }
     }),
     ARMOR_IRON(IRON_CHESTPLATE, "&bIron Armor", new String[]{"&r","&7Cost: &612 Gold"}, player -> {
-        if(player.getInventory().contains(DIAMOND_LEGGINGS)
-                ||player.getInventory().contains(IRON_LEGGINGS)){
+        if(Objects.requireNonNull(player.getInventory().getBoots()).getType()==(DIAMOND_BOOTS)
+                ||Objects.requireNonNull(player.getInventory().getBoots()).getType()==(IRON_BOOTS)
+        ){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
         }
@@ -228,7 +231,7 @@ public enum Item {
         }
     }),
     ARMOR_DIAMOND(DIAMOND_CHESTPLATE, "&bDiamond Chestplate", new String[]{"&r","&7Cost: &a6 Emeralds"}, player -> {
-        if(player.getInventory().contains(DIAMOND_LEGGINGS)){
+        if(Objects.requireNonNull(player.getInventory().getBoots()).getType()==(DIAMOND_BOOTS)){
             player.sendMessage(Text.format("&cYou already own this item, or something greater."));
             return;
         }
