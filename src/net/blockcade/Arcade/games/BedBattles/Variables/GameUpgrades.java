@@ -4,7 +4,6 @@ import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -56,16 +55,11 @@ public class GameUpgrades {
             },
             () -> {
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            Block bed = payload.getKey();
-                            Bed blockData = (Bed) bed.getBlockData();
-                            org.bukkit.block.Block relative = bed.getRelative(blockData.getFacing());
-                            bed.setType(Material.AIR);
-                            relative.setType(Material.AIR, false);
-                        }
-                    }.runTask(Main.game.handler());
+                    Block bed = payload.getKey();
+                    Bed blockData = (Bed) bed.getBlockData();
+                    org.bukkit.block.Block relative = bed.getRelative(blockData.getFacing());
+                    bed.setType(Material.AIR);
+                    relative.setType(Material.AIR, false);
                     Main.game.TeamManager().setCantRespawn(payload.getValue().getTeam(),true);
                     for(Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())){
                         Text.sendMessage(player,"&c&lBed Destroyed", Text.MessageType.TITLE);
@@ -76,7 +70,6 @@ public class GameUpgrades {
                 }
             },
             ()-> {
-                Bukkit.broadcastMessage("Sudden Death");
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
                     if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
 

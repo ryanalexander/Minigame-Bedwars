@@ -14,6 +14,7 @@
 package net.blockcade.Arcade.games.BedBattles;
 
 import net.blockcade.Arcade.Commands.GameCommand;
+import net.blockcade.Arcade.Commands.debug;
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Managers.GamePlayer;
 import net.blockcade.Arcade.Managers.ScoreboardManager;
@@ -48,6 +49,7 @@ public class Main extends JavaPlugin {
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
+        net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class).getCommand("debug").setExecutor(new debug(game));
         game.setMaxDamageHeight(512);
         game.setGameName(GameName.BEDBATTLES);
         Main.game=game;

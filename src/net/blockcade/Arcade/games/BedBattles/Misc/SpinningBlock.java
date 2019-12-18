@@ -28,11 +28,11 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Main;
 import net.blockcade.Arcade.Utils.Formatting.Text;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntity;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

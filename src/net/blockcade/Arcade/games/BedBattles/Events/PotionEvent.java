@@ -2,11 +2,11 @@ package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.games.BedBattles.Main;
-import net.minecraft.server.v1_14_R1.ChatMessageType;
-import net.minecraft.server.v1_14_R1.IChatBaseComponent;
-import net.minecraft.server.v1_14_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_15_R1.ChatMessageType;
+import net.minecraft.server.v1_15_R1.IChatBaseComponent;
+import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

@@ -78,14 +78,14 @@ public class GameStartEvent implements Listener {
             sm.setGamePlayer(bPlayer);
             sm.registerPlaceholder(new ScoreboardManager.placeholder() {
                 @Override
-                public int Integer(GamePlayer player) {
-                    return BedPlayer.getBedPlayer(player).getBedDestroys();
+                public String String(GamePlayer player) {
+                    return ""+BedPlayer.getBedPlayer(player).getBedDestroys();
                 }
             },":BED_DESTROYS:");
             sm.enableHealthCounter();
             String name = "  BedBattles  ";
             sm.setDisplayname(name);
-            scoreboard_upgrade_offsets.put(sm, sm.addLine("%s in %s Seconds"));
+            scoreboard_upgrade_offsets.put(sm, sm.addLine("COUNTER"));
             sm.addBlank();
             for (TeamColors teamColor : TeamColors.values()) {
                 sm.addLine(teamColor.getChatColor() + teamColor.name().substring(0, 1) + "&r " + teamColor.name().substring(0, 1).toUpperCase() + teamColor.name().substring(1).toLowerCase() + String.format(" :ELIMINATED_%s: ", teamColor.name()) + (teamColor == bPlayer.getTeam() ? "&7You" : ""));
@@ -205,7 +205,8 @@ public class GameStartEvent implements Listener {
             long timer = 0;
             @Override
             public void run() {
-                if(GameUpgrades.events[level].getTime()==timer){
+                if(level>=GameUpgrades.actions.length)cancel();
+                if(timer>=GameUpgrades.events[level].getTime()){
                     GameUpgrades.actions[level].run();
                     level++;
                     timer=1;
@@ -218,13 +219,15 @@ public class GameStartEvent implements Listener {
                         SECONDS=(SECONDS-((MINUTES)*60));
                         String SECONDS_FORMATTED = (SECONDS<=9?"0":"")+SECONDS;
                         String MINUTES_FORMATTED = (MINUTES<=9?"0":"")+MINUTES;
+
                         sm.editLine(payload.getValue()+1,GameUpgrades.events[level].getName());
                         sm.editLine(payload.getValue(),String.format("&e%s:&e%s",MINUTES_FORMATTED,SECONDS_FORMATTED));
+
                     }
                     timer=timer+20;
                 }
             }
-        }.runTaskTimerAsynchronously(Main.getPlugin(Main.class),0L,20L);
+        }.runTaskTimer(Main.getPlugin(Main.class),0L,20L);
     }
 
 
