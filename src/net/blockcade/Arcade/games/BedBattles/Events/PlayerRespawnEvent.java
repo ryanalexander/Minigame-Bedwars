@@ -57,7 +57,7 @@ public class PlayerRespawnEvent implements Listener {
             TeamColors team = game.TeamManager().getTeam(e.getPlayer());
             ItemStack sword = new ItemStack(Material.WOODEN_SWORD);
 
-            if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.SHARP_SWORD))
+            if (Main.teams.get(team).upgrades!=null&&Main.teams.get(team).upgrades.containsKey(TeamUpgrades.SHARP_SWORD))
                 sword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
             e.getPlayer().getInventory().addItem(sword);
 

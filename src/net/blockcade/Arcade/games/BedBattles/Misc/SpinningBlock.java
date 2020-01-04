@@ -28,6 +28,7 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Main;
 import net.blockcade.Arcade.Utils.Formatting.Text;
+import net.blockcade.Arcade.Varables.GameState;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -85,9 +86,10 @@ public class SpinningBlock {
             Location loc = SpinningBlock.this.e.getLocation();
 
             public void run() {
-                if (SpinningBlock.this.deleted) {
+                if (!Main.game.GameState().equals(GameState.IN_GAME))
+                    stop();
+                if (SpinningBlock.this.deleted)
                     cancel();
-                }
                 this.ticks += 3.0;
                 double change = Math.cos(this.ticks / 10.0);
 
@@ -109,5 +111,6 @@ public class SpinningBlock {
 
     public void stop() {
         this.e.remove();
+        this.deleted=true;
     }
 }

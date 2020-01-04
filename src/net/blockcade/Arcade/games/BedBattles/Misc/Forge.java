@@ -30,6 +30,7 @@ import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Main;
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Utils.GameUtils.Hologram;
+import net.blockcade.Arcade.Varables.GameState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -163,7 +164,7 @@ public class Forge {
             int i = 0;
             @Override
             public void run() {
-                if (forge.stopped) {
+                if (forge.stopped||!game.GameState().equals(GameState.IN_GAME)) {
                     cancel();
                     return;
                 }

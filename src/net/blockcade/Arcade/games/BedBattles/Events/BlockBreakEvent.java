@@ -53,6 +53,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class BlockBreakEvent implements Listener {
@@ -93,7 +94,7 @@ public class BlockBreakEvent implements Listener {
         if (teamBed.equals(breaker)) {
             blockBreaker.sendMessage(Text.format("&cYou may not break your own bed!"));
         } else {
-            getOtherBedBlock(bed).setType(Material.AIR);
+            Objects.requireNonNull(getOtherBedBlock(bed)).setType(Material.AIR);
             bed.setType(Material.AIR);
             Random rand = new Random();
             game.TeamManager().setCantRespawn(teamBed, true);

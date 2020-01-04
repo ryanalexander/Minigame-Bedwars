@@ -18,6 +18,7 @@ import net.blockcade.Arcade.Managers.GamePlayer;
 import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Utils.JavaUtils;
+import net.blockcade.Arcade.Varables.GameState;
 import net.blockcade.Arcade.Varables.TeamColors;
 import net.blockcade.Arcade.games.BedBattles.Inventories.shop;
 import net.blockcade.Arcade.games.BedBattles.Inventories.team_shop;
@@ -205,7 +206,7 @@ public class GameStartEvent implements Listener {
             long timer = 0;
             @Override
             public void run() {
-                if(level>=GameUpgrades.actions.length)cancel();
+                if(level>=GameUpgrades.actions.length||!game.GameState().equals(GameState.IN_GAME))cancel();
                 if(timer>=GameUpgrades.events[level].getTime()){
                     GameUpgrades.actions[level].run();
                     level++;
