@@ -148,8 +148,8 @@ public enum Item {
     },12),
     BLOCK_OBSIDIAN(OBSIDIAN, "&bObsidian", new String[]{"&r","&7Cost: &a4 Emeralds","&r","&dBlast Proof"}, player -> {
         if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(player, EMERALD, 4))
-            player.getInventory().addItem(new ItemStack(OBSIDIAN,12));
-    },12),
+            player.getInventory().addItem(new ItemStack(OBSIDIAN,4));
+    },4),
 
 
     // Weapons Menu
