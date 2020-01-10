@@ -206,9 +206,9 @@ public class GameStartEvent implements Listener {
             long timer = 0;
             @Override
             public void run() {
-                if(level>=GameUpgrades.actions.length||!game.GameState().equals(GameState.IN_GAME))cancel();
+                if(level>=GameUpgrades.events.length||!game.GameState().equals(GameState.IN_GAME))cancel();
                 if(timer>=GameUpgrades.events[level].getTime()){
-                    GameUpgrades.actions[level].run();
+                    GameUpgrades.events[level].run();
                     level++;
                     timer=1;
                 }else {

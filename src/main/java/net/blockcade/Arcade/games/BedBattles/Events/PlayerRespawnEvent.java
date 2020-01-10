@@ -79,6 +79,9 @@ public class PlayerRespawnEvent implements Listener {
                     Text.sendMessage(e.getKiller(), Text.format("&eFor killing %s&e you received:",e.getPlayer().getDisplayName()), Text.MessageType.TEXT_CHAT);
                     if(emeralds>0)Text.sendMessage(e.getKiller(), Text.format("&a+ %s Emeralds",emeralds+""), Text.MessageType.TEXT_CHAT);
                     if(diamonds>0)Text.sendMessage(e.getKiller(), Text.format("&b+ %s Diamonds",diamonds+""), Text.MessageType.TEXT_CHAT);
+
+                    e.getKiller().getInventory().addItem(new ItemStack(Material.EMERALD,emeralds));
+                    e.getKiller().getInventory().addItem(new ItemStack(Material.DIAMOND,diamonds));
                 }
             }
 

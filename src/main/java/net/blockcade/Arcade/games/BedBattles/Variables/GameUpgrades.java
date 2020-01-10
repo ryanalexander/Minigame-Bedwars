@@ -4,6 +4,7 @@ import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -17,43 +18,32 @@ import java.util.Objects;
 public class GameUpgrades {
 
     public static Event[] events = new Event[]{
-            new Event("&b&lDiamond &bII", 3600,0),
-            new Event("&a&lEmerald &aII", 3600,1),
-            new Event("&b&lDiamond &bIII", 2400, 2),
-            new Event("&a&lEmerald &aIII", 2400, 3),
-            new Event("&b&lDiamond &bIV", 1800, 4),
-            new Event("&c&lBeds Destroyed", 2400,5),
-            new Event("&4&lSudden Death", 6000,6),
-            new Event("&7&lGame Ends", 6000,7)
-    };
-
-    public static Runnable[] actions = new Runnable[]{
-            ()-> {
+            new Event("&b&lDiamond &bII", 3600,0,()->{
                 for(Forge f : Main.forges.get(Material.DIAMOND)){
                     f.setSpeed(f.getSpeed()-100);
                 }
-            },
-            ()-> {
+            }),
+            new Event("&a&lEmerald &aII", 3600,1,()->{
                 for(Forge f : Main.forges.get(Material.EMERALD)){
                     f.setSpeed(f.getSpeed()-300);
                 }
-            },
-            ()-> {
+            }),
+            new Event("&b&lDiamond &bIII", 2400, 2,()->{
                 for(Forge f : Main.forges.get(Material.DIAMOND)){
                     f.setSpeed(f.getSpeed()-100);
                 }
-            },
-            ()-> {
+            }),
+            new Event("&a&lEmerald &aIII", 2400, 3,()->{
                 for(Forge f : Main.forges.get(Material.EMERALD)){
                     f.setSpeed(f.getSpeed()-300);
                 }
-            },
-            ()-> {
+            }),
+            new Event("&b&lDiamond &bIV", 1800, 4,()->{
                 for(Forge f : Main.forges.get(Material.DIAMOND)){
                     f.setSpeed(f.getSpeed()-200);
                 }
-            },
-            () -> {
+            }),
+            new Event("&c&lBeds Destroyed", 2400,5,()->{
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
                     Block bed = payload.getKey();
                     Bed blockData = (Bed) bed.getBlockData();
@@ -68,34 +58,16 @@ public class GameUpgrades {
                         player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM,1,1);
                     }
                 }
-            },
-            ()-> {
+            }),
+            new Event("&4&lSudden Death", 6000,6,()->{
+                Main.game.BlockManager().doRollback();
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
                     if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
 
-                    Wither wither = (Wither) Main.game.map().spawnEntity(payload.getKey().getLocation().add(0,12,0), EntityType.WITHER);
-                    wither.setCustomName(payload.getValue().getTeam().formatted());
-                    wither.setCustomNameVisible(true);
-
-                    new BukkitRunnable(){
-                        boolean i = false;
-                        @Override
-                        public void run() {
-                            if(i){wither.setTarget(null);i=false;return;}
-                            for(Entity entity: Objects.requireNonNull(wither.getLocation().getWorld()).getNearbyEntities(wither.getLocation(),500,500,500)){
-                                if(!(entity instanceof Player))continue;
-                                if(!Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam()).contains(entity)){
-                                    wither.setTarget((LivingEntity) entity);
-                                    i=true;
-                                }
-                            }
-                        }
-                    }.runTaskTimer(Main.getPlugin(Main.class),0L,60L);
+                    Bukkit.broadcastMessage("TODO - Teleport to mid (Missing MID [RED,BLUE,GREEN]");
                 }
-            },
-            () -> {
-                Main.game.stop(true);
-            }
+            }),
+            new Event("&7&lGame Ends", 6000,7,()->Main.game.stop(true))
     };
 
     public static class Event {
@@ -103,11 +75,13 @@ public class GameUpgrades {
         String name;
         int time;
         int id;
+        Runnable runnable;
 
-        public Event(String name, int time, int id){
+        public Event(String name, int time, int id, Runnable runnable){
             this.name=name;
             this.time=time;
             this.id=id;
+            this.runnable=runnable;
         }
 
         public String getName() {
@@ -120,6 +94,10 @@ public class GameUpgrades {
 
         public int getTime() {
             return time;
+        }
+
+        public void run() {
+            runnable.run();
         }
     }
 
