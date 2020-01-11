@@ -72,18 +72,11 @@ public class tools implements Listener {
         tools.shop = header.format(game,player, Bukkit.createInventory(null, 9 * 6, Text.format("&cHard Worker Utilities")), true,0);
 
         Item close = new Item(Material.BARRIER, "&cBack");
-        close.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                p.openInventory((new net.blockcade.Arcade.games.BedBattles.Inventories.shop()).getShop(game, p));
-            }
-        });
+        close.setOnClick(p -> p.openInventory((new net.blockcade.Arcade.games.BedBattles.Inventories.shop()).getShop(game, p)));
 
         Item shears = new Item(Material.SHEARS, "&bShears");
-        shears.setLore(new String[]{
-                "&r",
-                "&7Cost: &f20 Iron"
-        });
+        shears.setLore("&r",
+                "&7Cost: &f20 Iron");
         shears.setAmount(1);
         shears.setOnClick(new Item.click() {
             public void run(Player p) {
@@ -98,39 +91,33 @@ public class tools implements Listener {
 
         Item pickaxe = new Item(nextUpgrade(player, PICKAXE), "&bPickaxe");
         ItemStack pickaxe_cost = getPrice(player, PICKAXE);
-        pickaxe.setLore(new String[]{
-                "&r",
-                "&7Cost: &f" + ((pickaxe_cost != null) ? pickaxe_cost.getAmount() + " " + pickaxe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded")
-        });
+        pickaxe.setLore("&r",
+                "&7Cost: &f" + ((pickaxe_cost != null) ? pickaxe_cost.getAmount() + " " + pickaxe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded"));
         pickaxe.setAmount(1);
-        pickaxe.setOnClick(new Item.click() {
-            public void run(Player p) {
-                if (pickaxe_cost != null) {
-                    if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, pickaxe_cost.getType(), pickaxe_cost.getAmount())) {
-                        Material last = currentUpgrade(p, PICKAXE);
-                        Material next = nextUpgrade(p, PICKAXE);
-                        ItemStack is = new ItemStack(next, 1);
-                        is.addEnchantment(Enchantment.DIG_SPEED,1);
-                        if (last != null&&p.getInventory().first(last)>=0) {
-                            p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
-                            p.getInventory().remove(last);
-                        }else {
-                            p.getInventory().addItem(new ItemStack(is));
-                        }
-                        p.openInventory(tools.getShop(game, p));
+        pickaxe.setOnClick(p -> {
+            if (pickaxe_cost != null) {
+                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, pickaxe_cost.getType(), pickaxe_cost.getAmount())) {
+                    Material last = currentUpgrade(p, PICKAXE);
+                    Material next = nextUpgrade(p, PICKAXE);
+                    ItemStack is = new ItemStack(next, 1);
+                    is.addEnchantment(Enchantment.DIG_SPEED,1);
+                    if (last != null&&p.getInventory().first(last)>=0) {
+                        p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
+                        p.getInventory().remove(last);
+                    }else {
+                        p.getInventory().addItem(new ItemStack(is));
                     }
+                    p.openInventory(tools.getShop(game, p));
                 }
             }
         });
 
         Item axe = new Item(nextUpgrade(player, AXE), "&bAXE");
         ItemStack axe_cost = getPrice(player, AXE);
-        axe.setLore(new String[]{
-                "&r",
-                "&7Cost: &f" + ((axe_cost != null) ? axe_cost.getAmount() + " " + axe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded")
-        });
+        axe.setLore("&r",
+                "&7Cost: &f" + ((axe_cost != null) ? axe_cost.getAmount() + " " + axe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded"));
         axe.setAmount(1);
-        axe.setOnClick((p)->{
+        axe.setOnClick(p -> {
             if (axe_cost != null) {
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
                     Material last = currentUpgrade(p, AXE);
@@ -147,28 +134,6 @@ public class tools implements Listener {
                         p.getInventory().addItem(new ItemStack(is));
                     }
                     p.openInventory(tools.getShop(game, p));
-                }
-            }
-        });
-        axe.setOnClick(new Item.click() {
-            public void run(Player p) {
-                if (axe_cost != null) {
-                    if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
-                        Material last = currentUpgrade(p, AXE);
-                        Material next = nextUpgrade(p, AXE);
-                        ItemStack is = new ItemStack(next, 1);
-                        is.addEnchantment(Enchantment.DIG_SPEED,1);
-                        if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0) {
-                            is.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-                        }
-                        if (last != null) {
-                            p.getInventory().setItem(p.getInventory().first(last),new ItemStack(is));
-                            p.getInventory().remove(last);
-                        }else {
-                            p.getInventory().addItem(new ItemStack(is));
-                        }
-                        p.openInventory(tools.getShop(game, p));
-                    }
                 }
             }
         });
@@ -311,13 +276,13 @@ public class tools implements Listener {
                     return null;
                 }
                 if (player.getInventory().contains(GOLDEN_AXE)) {
-                    return new ItemStack(Material.GOLD_INGOT, 16);
+                    return new ItemStack(Material.GOLD_INGOT, 6);
                 }
                 if (player.getInventory().contains(IRON_AXE)) {
-                    return new ItemStack(Material.GOLD_INGOT, 8);
+                    return new ItemStack(Material.GOLD_INGOT, 3);
                 }
                 if (player.getInventory().contains(WOODEN_AXE)) {
-                    return new ItemStack(Material.IRON_INGOT, 20);
+                    return new ItemStack(Material.IRON_INGOT, 10);
                 }
                 return new ItemStack(IRON_INGOT, 10);
             default:

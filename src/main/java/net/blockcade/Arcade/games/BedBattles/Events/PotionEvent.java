@@ -2,11 +2,7 @@ package net.blockcade.Arcade.games.BedBattles.Events;
 
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.games.BedBattles.Main;
-import net.minecraft.server.v1_15_R1.ChatMessageType;
-import net.minecraft.server.v1_15_R1.IChatBaseComponent;
-import net.minecraft.server.v1_15_R1.PacketPlayOutChat;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -41,7 +37,7 @@ public class PotionEvent implements Listener {
                     @Override
                     public void run() {
                         counter = counter + 1;
-                        CraftPlayer player = (CraftPlayer) e.getEntity();
+                        Player player = (Player) e.getEntity();
                         char chatColor = 'a';
                         if (counter / 20 > (invisible_time / 3)) {
                             chatColor = '6';
@@ -52,9 +48,7 @@ public class PotionEvent implements Listener {
                         if (counter / 20 > (invisible_time)) {
                             chatColor = '4';
                         }
-                        IChatBaseComponent comp = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + Text.format(String.format("&eInvisible for &" + chatColor + "%s&as.", 30 - (counter / 20))) + "\"}");
-                        PacketPlayOutChat packet = new PacketPlayOutChat(comp, ChatMessageType.GAME_INFO);
-                        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                        Text.sendMessage(player,"&eInvisible for &"+String.format("&eInvisible for &" + chatColor + "%s&as.", 30 - (counter / 20)), Text.MessageType.ACTION_BAR);
                         if ((30 - (counter / 20)) <= 0 || (!invis_players.containsKey(player))) {
                             cancel();
                         }

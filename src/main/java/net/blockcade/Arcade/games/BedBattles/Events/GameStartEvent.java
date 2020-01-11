@@ -61,15 +61,6 @@ public class GameStartEvent implements Listener {
     @EventHandler
     public void GameStartEvent(net.blockcade.Arcade.Managers.EventManager.GameStartEvent e) {
 
-        // Send GameStart message
-        Bukkit.broadcastMessage(Text.format("&d&m&l============================="));
-        Bukkit.broadcastMessage(Text.format(JavaUtils.center("&f&lBed Battles", 42 + (4))));
-        Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lProtect your bed and destroy the enemy beds.", 41 + (4))));
-        Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lUpgrade yourself and your team by collecting", 41 + (4))));
-        Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lIron, Gold, Emerald and Diamond from generators", 41 + (4))));
-        Bukkit.broadcastMessage(Text.format(JavaUtils.center("&e&lto access powerful upgrades.", 41 + (4))));
-        Bukkit.broadcastMessage(Text.format("&d&m&l============================="));
-
         for(Player player : Bukkit.getOnlinePlayers()){
             // Register BedPlayer object (Also creates GamePlayer)
             BedPlayer bPlayer = new BedPlayer(player);

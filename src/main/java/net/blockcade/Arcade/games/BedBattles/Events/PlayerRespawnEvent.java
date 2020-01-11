@@ -66,6 +66,9 @@ public class PlayerRespawnEvent implements Listener {
             Material axe = tools.previousUpgrade(materials, ItemUpgrades.AXE);
             Material pickaxe = tools.previousUpgrade(materials, ItemUpgrades.PICKAXE);
 
+            // Teleport to team spawn
+            e.getPlayer().teleport(game.TeamManager().getSpawn(game.TeamManager().getTeam(e.getPlayer())));
+
             if(e.getKiller()!=null){
                 int emeralds = 0;
                 int diamonds = 0;
