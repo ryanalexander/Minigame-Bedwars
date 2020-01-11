@@ -28,19 +28,18 @@ package net.blockcade.Arcade.games.BedBattles.Misc;
 
 import net.blockcade.Arcade.Main;
 import net.blockcade.Arcade.Utils.Formatting.Text;
+import net.blockcade.Arcade.Utils.ReflectionUtil;
 import net.blockcade.Arcade.Varables.GameState;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntity;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Iterator;
+import java.lang.reflect.Constructor;
 
 public class SpinningBlock {
     public SpinningBlock(Location location, Material material) {
@@ -93,20 +92,19 @@ public class SpinningBlock {
                 this.ticks += 3.0;
                 double change = Math.cos(this.ticks / 10.0);
 
-                PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook packet = new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(SpinningBlock.this.e.getEntityId(), (byte) 0, (byte) (int) (change * 2.0), (byte) 0, (byte) (int) (this.loc.getYaw() + 0.0), (byte) (int) ((this.loc.getPitch() + 180.0) / 360.0), true);
-                this.loc.setYaw(this.loc.getYaw() + 7);
-                this.loc.setY(change);
-                Player p;
-                for (Iterator localIterator = Bukkit.getOnlinePlayers().iterator(); localIterator.hasNext();
-                     ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet)) {
-                    p = (Player) localIterator.next();
+
+                try {
+                    Constructor<?> EntityLookConstructor = ReflectionUtil.getNMSClass("PacketPlayOutEntity.PacketPlayOutEntityLook").getConstructor(new Class[] { Integer.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Boolean.TYPE });
+                    Object packet = EntityLookConstructor.newInstance(SpinningBlock.this.e.getEntityId(), (byte) 0, (byte) (int) (change * 2.0), (byte) 0, (byte) (int) (this.loc.getYaw() + 0.0), (byte) (int) ((this.loc.getPitch() + 180.0) / 360.0), true);
+                    this.loc.setYaw(this.loc.getYaw() + 7);
+                    this.loc.setY(change);
+                    for(Player player : Bukkit.getOnlinePlayers())
+                        ReflectionUtil.sendPacket(player,packet);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         }.runTaskTimerAsynchronously(Main.getPlugin(Main.class), 0, 1);
-    }
-
-    public void teleport(Location l) {
-        this.e.teleport(l);
     }
 
     public void stop() {

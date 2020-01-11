@@ -26,6 +26,7 @@ public class PotionEvent implements Listener {
                 e.setCancelled(true);
                 ArmorStand as = (ArmorStand) e.getEntity().getWorld().spawnEntity(e.getEntity().getLocation(), EntityType.ARMOR_STAND);
                 as.setVisible(false);
+                as.setMarker(true);
                 as.setItemInHand(((Player) e.getEntity()).getItemOnCursor());
                 invis_players.put((Player) e.getEntity(), as);
                 for (Player player : Bukkit.getOnlinePlayers()) {
