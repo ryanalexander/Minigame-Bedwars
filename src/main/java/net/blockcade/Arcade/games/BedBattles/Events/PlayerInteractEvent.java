@@ -148,8 +148,7 @@ public class PlayerInteractEvent implements Listener {
     public void ProjectileHitEvent(ProjectileHitEvent e){
         switch (e.getEntity().getType()){
             case FIREBALL:
-                Objects.requireNonNull(Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld()).createExplosion(e.getHitBlock().getLocation(),2,false);
-                Objects.requireNonNull(Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld()).createExplosion(e.getEntity().getLocation(),2,false);
+                Objects.requireNonNull(Objects.requireNonNull(e.getHitBlock()).getLocation().getWorld()).createExplosion(e.getEntity().getLocation(),2,false,false);
                 break;
             case ENDER_PEARL:
                 e.getHitBlock().getLocation().getWorld().playSound(e.getHitBlock().getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP,1f,0f);

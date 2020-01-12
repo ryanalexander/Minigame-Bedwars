@@ -1,6 +1,7 @@
 package net.blockcade.Arcade.games.BedBattles.Variables;
 
 import net.blockcade.Arcade.Utils.Formatting.Text;
+import net.blockcade.Arcade.Utils.JavaUtils;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
@@ -63,9 +64,12 @@ public class GameUpgrades {
                 Main.game.BlockManager().doRollback();
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
                     if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
-
-                    Bukkit.broadcastMessage("TODO - Teleport to mid (Missing MID [RED,BLUE,GREEN]");
+                    for(Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())) {
+                        player.teleport(Main.game.TeamManager().getConfigLocation("MID", payload.getValue().getTeam()));
+                        player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_GROWL,1L,1L);
+                    }
                 }
+                Bukkit.broadcastMessage(Text.format("&c&lDeathmatch! &7Fight to the death, last team standing wins."));
             }),
             new Event("&7&lGame Ends", 6000,7,()->Main.game.stop(true))
     };

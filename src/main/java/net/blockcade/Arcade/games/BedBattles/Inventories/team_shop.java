@@ -110,17 +110,15 @@ public class team_shop implements Listener {
 
         Item reinforced_armor = new Item(Material.IRON_CHESTPLATE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.REINFORCED_ARMOR) ? "&a" : "&c") + "Reinforced Armor " + RomanNumerals.valueOf("_" + getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)).getNumeral());
 
-        reinforced_armor.setLore(new String[]{
-                Text.format("&7Your team permanently gains"),
-                Text.format("&7Protection on all armor pieces!"),
+        reinforced_armor.setLore(("&7Your team permanently gains"),
+                ("&7Protection on all armor pieces!"),
                 "",
-                Text.format(((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 1 ? "&a" : "&7") + "Tier 1&7: Protection I, &b2 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 2 ? "&a" : "&7") + "Tier 2&7: Protection II, &b4 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 3 ? "&a" : "&7") + "Tier 3&7: Protection III, &b8 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 4 ? "&a" : "&7") + "Tier 4&7: Protection IV, &b16 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 1 ? "&a" : "&7") + "Tier 1&7: Protection I, &b2 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 2 ? "&a" : "&7") + "Tier 2&7: Protection II, &b4 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 3 ? "&a" : "&7") + "Tier 3&7: Protection III, &b8 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR)) >= 4 ? "&a" : "&7") + "Tier 4&7: Protection IV, &b16 Diamonds"),
                 "",
-                (!((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1) >= 4) ? (player.getInventory().containsAtLeast(armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice(), armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded")
-        });
+                (!((getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1) >= 4) ? (player.getInventory().containsAtLeast(armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice(), armor_level.valueOf("PROT" + (getOrZero(team, TeamUpgrades.REINFORCED_ARMOR) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded"));
 
         reinforced_armor.setOnClick(new Item.click() {
             @Override
@@ -143,88 +141,76 @@ public class team_shop implements Listener {
 
         Item ManiacMiner = new Item(Material.GOLDEN_PICKAXE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.MANIAC_MINER) ? "&a" : "&c") + "Maniac Miner " + RomanNumerals.valueOf("_" + getOrZero(team, TeamUpgrades.MANIAC_MINER)).getNumeral());
 
-        ManiacMiner.setLore(new String[]{
-                Text.format("&7All players on your team"),
-                Text.format("&7permanently gain Haste"),
+        ManiacMiner.setLore(("&7All players on your team"),
+                ("&7permanently gain Haste"),
                 "",
-                Text.format(((getOrZero(team, TeamUpgrades.MANIAC_MINER)) >= 1 ? "&a" : "&7") + "Tier 1&7: Haste I, &b2 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.MANIAC_MINER)) >= 2 ? "&a" : "&7") + "Tier 2&7: Haste II, &b4 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.MANIAC_MINER)) >= 1 ? "&a" : "&7") + "Tier 1&7: Haste I, &b2 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.MANIAC_MINER)) >= 2 ? "&a" : "&7") + "Tier 2&7: Haste II, &b4 Diamonds"),
                 "",
-                (!((getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1) >= 2) ? (player.getInventory().containsAtLeast(haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice(), haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded")
-        });
+                (!((getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1) >= 2) ? (player.getInventory().containsAtLeast(haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice(), haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded"));
 
-        ManiacMiner.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                TeamColors team = game.TeamManager().getTeam(p);
-                if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.MANIAC_MINER) && Main.teams.get(team).upgrades.get(TeamUpgrades.MANIAC_MINER) >= 2)
-                    return;
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getType()), haste_level.valueOf("HASTE" + (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getAmount())) {
-                    Main.teams.get(team).upgrades.put(TeamUpgrades.MANIAC_MINER, (getOrZero(team, TeamUpgrades.MANIAC_MINER) + 1));
-                    p.openInventory((new team_shop()).getShop(game, p));
-                }
+        ManiacMiner.setOnClick(p -> {
+            TeamColors team12 = game.TeamManager().getTeam(p);
+            if (Main.teams.get(team12).upgrades.containsKey(TeamUpgrades.MANIAC_MINER) && Main.teams.get(team12).upgrades.get(TeamUpgrades.MANIAC_MINER) >= 2)
+                return;
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (haste_level.valueOf("HASTE" + (getOrZero(team12, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getType()), haste_level.valueOf("HASTE" + (getOrZero(team12, TeamUpgrades.MANIAC_MINER) + 1)).getPrice().getAmount())) {
+                Main.teams.get(team12).upgrades.put(TeamUpgrades.MANIAC_MINER, (getOrZero(team12, TeamUpgrades.MANIAC_MINER) + 1));
+                p.openInventory((new team_shop()).getShop(game, p));
             }
         });
 
         Item forge = new Item(Material.FURNACE, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) ? "&a" : "&c") + "Forge Speed");
 
-        forge.setLore(new String[]{
-                Text.format("&7Upgrade resources spawning on"),
-                Text.format("&7you island."),
+        forge.setLore(("&7Upgrade resources spawning on"),
+                ("&7you island."),
                 "",
-                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 1 ? "&a" : "&7") + "Tier 1&7: +50% Resources, &b2 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 2 ? "&a" : "&7") + "Tier 2&7: +100% Resources, &b4 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 3 ? "&a" : "&7") + "Tier 3&7: Spawn emeralds, &b6 Diamonds"),
-                Text.format(((getOrZero(team, TeamUpgrades.FORGE)) >= 4 ? "&a" : "&7") + "Tier 4&7: +200% Resources, &b8 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.FORGE)) >= 1 ? "&a" : "&7") + "Tier 1&7: +50% Resources, &b2 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.FORGE)) >= 2 ? "&a" : "&7") + "Tier 2&7: +100% Resources, &b4 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.FORGE)) >= 3 ? "&a" : "&7") + "Tier 3&7: Spawn emeralds, &b6 Diamonds"),
+                (((getOrZero(team, TeamUpgrades.FORGE)) >= 4 ? "&a" : "&7") + "Tier 4&7: +200% Resources, &b8 Diamonds"),
                 "",
-                (!((getOrZero(team, TeamUpgrades.FORGE) + 1) >= 4) ? (player.getInventory().containsAtLeast(forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice(), forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded")
-        });
+                (!((getOrZero(team, TeamUpgrades.FORGE) + 1) >= 4) ? (player.getInventory().containsAtLeast(forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice(), forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getAmount()) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aFully Upgraded"));
 
-        forge.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                TeamColors team = game.TeamManager().getTeam(p);
-                if (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.FORGE) && Main.teams.get(team).upgrades.get(TeamUpgrades.FORGE) >= 4)
-                    return;
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getType()), forge_level.valueOf("LVL" + (getOrZero(team, TeamUpgrades.FORGE) + 1)).getPrice().getAmount())) {
-                    Main.teams.get(team).upgrades.put(TeamUpgrades.FORGE, (getOrZero(team, TeamUpgrades.FORGE) + 1));
-                    switch (getOrZero(team, TeamUpgrades.FORGE)){
-                        case 1:
-                            Main.teams.get(team).getIron_forge().incresePercent(25);
-                            Main.teams.get(team).getGold_forge().incresePercent(25);
-                            break;
-                        case 2:
-                            Main.teams.get(team).getIron_forge().incresePercent(50);
-                            Main.teams.get(team).getGold_forge().incresePercent(50);
-                            break;
-                        case 3:
-                            Forge forge = new Forge(game,Main.teams.get(team).getIron_forge().getLocation(),Material.EMERALD,(30 * 20),false,2,"");
-                            Main.teams.get(team).setEmerald_forge(forge);
-                            break;
-                        case 4:
-                            Main.teams.get(team).getIron_forge().incresePercent(80);
-                            Main.teams.get(team).getGold_forge().incresePercent(80);
-                            Main.teams.get(team).getEmerald_forge().incresePercent(25);
-                            break;
-                        default:
-                            break;
-                    }
-                    p.openInventory((new team_shop()).getShop(game, p));
+        forge.setOnClick(p -> {
+            TeamColors team1 = game.TeamManager().getTeam(p);
+            if (Main.teams.get(team1).upgrades.containsKey(TeamUpgrades.FORGE) && Main.teams.get(team1).upgrades.get(TeamUpgrades.FORGE) >= 4)
+                return;
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, (forge_level.valueOf("LVL" + (getOrZero(team1, TeamUpgrades.FORGE) + 1)).getPrice().getType()), forge_level.valueOf("LVL" + (getOrZero(team1, TeamUpgrades.FORGE) + 1)).getPrice().getAmount())) {
+                Main.teams.get(team1).upgrades.put(TeamUpgrades.FORGE, (getOrZero(team1, TeamUpgrades.FORGE) + 1));
+                switch (getOrZero(team1, TeamUpgrades.FORGE)){
+                    case 1:
+                        Main.teams.get(team1).getIron_forge().incresePercent(25);
+                        Main.teams.get(team1).getGold_forge().incresePercent(25);
+                        break;
+                    case 2:
+                        Main.teams.get(team1).getIron_forge().incresePercent(50);
+                        Main.teams.get(team1).getGold_forge().incresePercent(50);
+                        break;
+                    case 3:
+                        Forge forge1 = new Forge(game,Main.teams.get(team1).getIron_forge().getLocation(),Material.EMERALD,(30 * 20),true,2,"");
+                        Main.teams.get(team1).setEmerald_forge(forge1);
+                        break;
+                    case 4:
+                        Main.teams.get(team1).getIron_forge().incresePercent(80);
+                        Main.teams.get(team1).getGold_forge().incresePercent(80);
+                        Main.teams.get(team1).getEmerald_forge().incresePercent(25);
+                        break;
+                    default:
+                        break;
                 }
+                p.openInventory((new team_shop()).getShop(game, p));
             }
         });
 
 
 
         Item healing = new Item(Material.BEACON, (Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) ? "&a" : "&c") + "Heal Pool");
-        healing.setLore(new String[]{
-                Text.format("&7Creates a Regeneration field"),
-                Text.format("&7around your base!"),
+        healing.setLore(("&7Creates a Regeneration field"),
+                ("&7around your base!"),
                 "",
-                Text.format("&7Cost: &b1 Diamond"),
+                ("&7Cost: &b1 Diamond"),
                 "",
-                (!Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) ? (player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aAlready purchased")
-        });
+                (!Main.teams.get(team).upgrades.containsKey(TeamUpgrades.HEALING) ? (player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1) ? "&eClick to purchase" : "&cYou don't have enough Diamonds!") : "&aAlready purchased"));
         healing.setOnClick(new Item.click() {
             @Override
             public void run(Player p) {
@@ -243,26 +229,17 @@ public class team_shop implements Listener {
         Item trap_2 = new Item((trapCount>=2?bedTeam.getTrap(1).getItem():Material.RED_STAINED_GLASS_PANE),trapCount>=2?bedTeam.getTrap(1).getName():"&cNo trap set");
         Item trap_3 = new Item((trapCount>=3?bedTeam.getTrap(2).getItem():Material.RED_STAINED_GLASS_PANE),trapCount>=3?bedTeam.getTrap(2).getName():"&cNo trap set");
 
-        trap_1.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                if(bedTeam.traps.size()>=1){return;}
-                p.openInventory(traps.getShop(game,p));
-            }
+        trap_1.setOnClick(p -> {
+            if(bedTeam.traps.size()>=1){return;}
+            p.openInventory(traps.getShop(game,p));
         });
-        trap_2.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                if(bedTeam.traps.size()>=2){return;}
-                p.openInventory(traps.getShop(game,p));
-            }
+        trap_2.setOnClick(p -> {
+            if(bedTeam.traps.size()>=2){return;}
+            p.openInventory(traps.getShop(game,p));
         });
-        trap_3.setOnClick(new Item.click() {
-            @Override
-            public void run(Player p) {
-                if(bedTeam.traps.size()>=3){return;}
-                p.openInventory(traps.getShop(game,p));
-            }
+        trap_3.setOnClick(p -> {
+            if(bedTeam.traps.size()>=3){return;}
+            p.openInventory(traps.getShop(game,p));
         });
 
         this.shop.setItem(10, sharp_swords.spigot());

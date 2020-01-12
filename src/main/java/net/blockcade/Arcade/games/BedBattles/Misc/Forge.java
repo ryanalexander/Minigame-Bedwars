@@ -46,7 +46,7 @@ public class Forge {
     private Material material;
     private Game game;
     private boolean stopped = false;
-    private boolean hasSummary = false;
+    private boolean hasSummary;
     private Hologram hologram;
     private int max_material=0;
     private int amount;
@@ -156,8 +156,8 @@ public class Forge {
     }
 
     private void run() {
-        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3.25,0),new String[]{Text.format(title)});
-        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3,0),new String[]{"&fDropping in &e%s&f second%s"});
+        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3.25,0), Text.format(title));
+        if(!hasSummary) this.hologram = new Hologram(game,location.clone().add(0,3,0), "&fDropping in &e%s&f second%s");
         Forge f = this;
         new BukkitRunnable() {
             Forge forge = f;
