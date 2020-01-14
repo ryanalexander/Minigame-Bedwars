@@ -40,6 +40,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 public class SpinningBlock {
     public SpinningBlock(Location location, Material material) {
@@ -94,8 +95,8 @@ public class SpinningBlock {
 
 
                 try {
-                    Constructor<?> EntityLookConstructor = ReflectionUtil.getNMSClass("PacketPlayOutEntity.PacketPlayOutEntityLook").getConstructor(new Class[] { Integer.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Byte.TYPE, Boolean.TYPE });
-                    Object packet = EntityLookConstructor.newInstance(SpinningBlock.this.e.getEntityId(), (byte) 0, (byte) (int) (change * 2.0), (byte) 0, (byte) (int) (this.loc.getYaw() + 0.0), (byte) (int) ((this.loc.getPitch() + 180.0) / 360.0), true);
+                    Constructor<?> constructor = ReflectionUtil.getNMSClass("PacketPlayOutEntity$PacketPlayOutRelEntityMoveLook").getConstructor(Integer.TYPE, Short.TYPE, Short.TYPE, Short.TYPE, Byte.TYPE, Byte.TYPE, Boolean.TYPE);
+                    Object packet = constructor.newInstance(SpinningBlock.this.e.getEntityId(), (short) 0, (short) (change * 2.0), (short) 0, (byte) (this.loc.getYaw() + 0.0), (byte) ((this.loc.getPitch() + 180.0) / 360.0), true);
                     this.loc.setYaw(this.loc.getYaw() + 7);
                     this.loc.setY(change);
                     for(Player player : Bukkit.getOnlinePlayers())

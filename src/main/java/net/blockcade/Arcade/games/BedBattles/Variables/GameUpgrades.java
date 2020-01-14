@@ -65,7 +65,7 @@ public class GameUpgrades {
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
                     if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
                     for(Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())) {
-                        player.teleport(Main.game.TeamManager().getConfigLocation("MID", payload.getValue().getTeam()));
+                        player.teleport(Main.game.TeamManager().getConfigLocation("mid", payload.getValue().getTeam()));
                         player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_GROWL,1L,1L);
                     }
                 }
