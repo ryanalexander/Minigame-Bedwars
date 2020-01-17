@@ -56,29 +56,32 @@ public class PlayerMoveEvent implements Listener {
         if (!game.TeamManager().hasTeam(e.getPlayer())) return;
         TeamColors team = game.TeamManager().getTeam(e.getPlayer());
 
-
-
         BedTeam closest = closestBed(e.getTo());
+        if((closest.getBed().getLocation().distanceSquared(e.getTo()))<200&&Main.noCamping&&!Main.camping.containsKey(e.getPlayer()))
+            Main.camping.put(e.getPlayer(),30);
+
         if(!(closest.getTeam().equals(team))&&closest.traps.size()>0&& (!Spectator.isSpectator(e.getPlayer())) && !Main.trap_immunity.contains(e.getPlayer())){
-            if(closest.getTrap()!=null&&((closest.getBed().getLocation().distanceSquared(e.getTo()))<200)){
-                switch (closest.getTrap()){
-                    case ALERT:
-                        e.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
-                        break;
-                    case BLINDNESS:
-                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,140,2),true);
-                        e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW,140,2),true);
-                        break;
-                    default:
-                        System.out.println("Unknown trap exception "+closest.getTrap());
+            if((closest.getBed().getLocation().distanceSquared(e.getTo()))<200) {
+                if (closest.getTrap() != null) {
+                    switch (closest.getTrap()) {
+                        case ALERT:
+                            e.getPlayer().removePotionEffect(PotionEffectType.INVISIBILITY);
+                            break;
+                        case BLINDNESS:
+                            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 140, 2), true);
+                            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 140, 2), true);
+                            break;
+                        default:
+                            System.out.println("Unknown trap exception " + closest.getTrap());
+                    }
+                    Text.sendMessage(e.getPlayer(), "&c&lTrap Triggered", Text.MessageType.TITLE);
+                    Text.sendMessage(e.getPlayer(), "&fYou have triggered &e" + closest.getTrap().getName() + "&f!!", Text.MessageType.SUBTITLE);
+                    for (Player player : game.TeamManager().getTeamPlayers(closest.getTeam())) {
+                        Text.sendMessage(player, "&c&lTrap Triggered", Text.MessageType.TITLE);
+                        Text.sendMessage(player, "&e" + closest.getTrap().getName() + "&f has been triggered", Text.MessageType.SUBTITLE);
+                    }
+                    closest.removeTrap();
                 }
-                Text.sendMessage(e.getPlayer(),"&c&lTrap Triggered", Text.MessageType.TITLE);
-                Text.sendMessage(e.getPlayer(),"&fYou have triggered &e"+closest.getTrap().getName()+"&f!!", Text.MessageType.SUBTITLE);
-                for(Player player : game.TeamManager().getTeamPlayers(closest.getTeam())){
-                    Text.sendMessage(player,"&c&lTrap Triggered", Text.MessageType.TITLE);
-                    Text.sendMessage(player,"&e"+closest.getTrap().getName()+"&f has been triggered", Text.MessageType.SUBTITLE);
-                }
-                closest.removeTrap();
             }
         }
 
@@ -91,7 +94,7 @@ public class PlayerMoveEvent implements Listener {
         }
     }
 
-    private BedTeam closestBed(Location location){
+    public static BedTeam closestBed(Location location){
         Location l = null;
         BedTeam team = null;
         double distance = 0;

@@ -40,15 +40,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import static net.blockcade.Arcade.games.BedBattles.Main.forges;
-import static net.blockcade.Arcade.games.BedBattles.Main.scoreboard_upgrade_offsets;
+import static net.blockcade.Arcade.games.BedBattles.Main.*;
 
 public class GameStartEvent implements Listener {
 
@@ -93,6 +90,8 @@ public class GameStartEvent implements Listener {
 
             player.teleport(game.TeamManager().getSpawn(bPlayer.getTeam()));
             player.getInventory().setArmorContents(game.TeamManager().getArmor(bPlayer.getTeam()));
+
+            player.getInventory().addItem(new ItemStack(Material.WOODEN_SWORD));
         }
 
 
@@ -193,11 +192,26 @@ public class GameStartEvent implements Listener {
         }
 
         new BukkitRunnable(){
-            int level = 0;
+            int level = 6;
             long timer = 0;
             @Override
             public void run() {
-                if(level>=GameUpgrades.events.length||!game.GameState().equals(GameState.IN_GAME))cancel();
+                if(!game.GameState().equals(GameState.IN_GAME))cancel();
+                if(Main.noCamping){
+                    for(Map.Entry<Player,Integer> payload : ((HashMap<Player,Integer>)camping.clone()).entrySet()){
+                        BedTeam closest = PlayerMoveEvent.closestBed(payload.getKey().getLocation());
+                        if((closest.getBed().getLocation().distanceSquared(payload.getKey().getLocation()))<200) {
+                            Text.sendMessage(payload.getKey(),"&6&lOUT OF BOUNDS, TELEPORTING IN &c&l"+payload.getValue()+"&6&l SECONDS", Text.MessageType.ACTION_BAR);
+                            camping.put(payload.getKey(),payload.getValue()-1);
+                        }
+                        if(payload.getValue()<=0) {
+                            Text.sendMessage(payload.getKey(),"&c&lRETURNED TO MID", Text.MessageType.ACTION_BAR);
+                            payload.getKey().teleport(game.TeamManager().getConfigLocation("mid", game.TeamManager().getTeam(payload.getKey())));
+                            camping.remove(payload.getKey());
+                        }
+                    }
+                }
+                if(level>=GameUpgrades.events.length)return;
                 if(timer>=GameUpgrades.events[level].getTime()){
                     GameUpgrades.events[level].run();
                     level++;

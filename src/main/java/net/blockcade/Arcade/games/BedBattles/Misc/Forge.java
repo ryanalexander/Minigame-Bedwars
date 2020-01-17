@@ -114,6 +114,7 @@ public class Forge {
      */
     public void stop() {
         this.stopped = true;
+        if(this.spinningBlock!=null)this.spinningBlock.stop();
     }
 
     /**

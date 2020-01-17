@@ -2,6 +2,7 @@ package net.blockcade.Arcade.games.BedBattles.Variables;
 
 import net.blockcade.Arcade.Utils.Formatting.Text;
 import net.blockcade.Arcade.Utils.JavaUtils;
+import net.blockcade.Arcade.Varables.GameModule;
 import net.blockcade.Arcade.games.BedBattles.Main;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
@@ -11,8 +12,10 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -60,16 +63,41 @@ public class GameUpgrades {
                     }
                 }
             }),
-            new Event("&4&lSudden Death", 6000,6,()->{
+            new Event("&4&lSudden Death", /*6000*/300,6,()->{
                 Main.game.BlockManager().doRollback();
+
+                Main.noCamping=true;
+
+                // Remove all managed entities
+                for(Entity e : (ArrayList<Entity>)Main.game.EntityManager().GameEntities().clone())
+                    Main.game.EntityManager().remove(e);
+
+                // Remove all forges
+                for(Map.Entry<Material, ArrayList<Forge>> payload : Main.forges.entrySet())
+                    for(Forge forge : payload.getValue())
+                        forge.stop();
+
                 for(Map.Entry<Block, BedTeam> payload : Main.beds.entrySet()){
-                    if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam()))continue;
+                    if(Main.game.TeamManager().isEliminated(payload.getValue().getTeam())) continue;
+                    Main.game.setModule(GameModule.INFINITE_BUILDING,true);
+
+                    // Clear all traps & upgrades
+                    payload.getValue().upgrades.clear();
+                    payload.getValue().traps.clear();
+
+                    // Disable all forges
+                    if(payload.getValue().getIron_forge()!=null)payload.getValue().getIron_forge().stop();
+                    if(payload.getValue().getGold_forge()!=null)payload.getValue().getGold_forge().stop();
+                    if(payload.getValue().getEmerald_forge()!=null)payload.getValue().getEmerald_forge().stop();
+
+                    // Teleport all players to mid & give 64 blocks of wool
                     for(Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())) {
                         player.teleport(Main.game.TeamManager().getConfigLocation("mid", payload.getValue().getTeam()));
+                        player.getInventory().addItem(new ItemStack(Material.valueOf(Main.game.TeamManager().getTeam(player).getTranslation()+"_WOOL"),64));
                         player.playSound(player.getLocation(),Sound.ENTITY_ENDER_DRAGON_GROWL,1L,1L);
                     }
                 }
-                Bukkit.broadcastMessage(Text.format("&c&lDeathmatch! &7Fight to the death, last team standing wins."));
+                Bukkit.broadcastMessage(Text.format("&c&lSudden Death! &7Fight to the death, last team standing wins."));
             }),
             new Event("&7&lGame Ends", 6000,7,()->Main.game.stop(true))
     };

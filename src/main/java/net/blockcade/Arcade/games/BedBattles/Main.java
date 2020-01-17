@@ -44,6 +44,9 @@ public class Main extends JavaPlugin {
     public static HashMap<Chest, BedTeam> chests = new HashMap<>();
     public static Game game;
 
+    public static boolean noCamping = false;
+    public static HashMap<Player,Integer> camping = new HashMap<>();
+
     @Override
     public void onEnable() {
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
@@ -80,6 +83,7 @@ public class Main extends JavaPlugin {
         game.setModule(GameModule.TEAMS,true);
         game.setModule(GameModule.CHAT_MANAGER,true);
         game.setModule(GameModule.NO_WEATHER_CHANGE,true);
+        game.setModule(GameModule.INFINITE_BUILDING,false);
 
         game.setModule(GameModule.NO_FALL_DAMAGE,false);
 
