@@ -1,18 +1,20 @@
+
 /*
  *
- *  *
- *  * © Stelch Software 2019, distribution is strictly prohibited
- *  * Blockcade is a company of Stelch Software
- *  *
- *  * Changes to this file must be documented on push.
- *  * Unauthorised changes to this file are prohibited.
- *  *
- *  * @author Ryan Wood
- *  @since 18/8/2019
+ *
+ *  © Stelch Software 2020, distribution is strictly prohibited
+ *  Blockcade is a company of Stelch Software
+ *
+ *  Changes to this file must be documented on push.
+ *  Unauthorised changes to this file are prohibited.
+ *
+ *  @author Ryan W
+ * @since (DD/MM/YYYY) 18/1/2020
  */
 
 package net.blockcade.Arcade.games.BedBattles;
 
+import jdk.nashorn.internal.ir.debug.JSONWriter;
 import net.blockcade.Arcade.Commands.GameCommand;
 import net.blockcade.Arcade.Commands.debug;
 import net.blockcade.Arcade.Game;
@@ -30,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +51,7 @@ public class Main extends JavaPlugin {
     public static HashMap<Player,Integer> camping = new HashMap<>();
 
     @Override
-    public void onEnable() {
+    public void onEnable() {;
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
