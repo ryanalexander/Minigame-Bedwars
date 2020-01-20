@@ -88,6 +88,8 @@ public class Main extends JavaPlugin {
         game.setModule(GameModule.NO_WEATHER_CHANGE,true);
         game.setModule(GameModule.INFINITE_BUILDING,false);
 
+        game.setModule(GameModule.ALLSTATE_JOIN,false);
+
         game.setModule(GameModule.NO_FALL_DAMAGE,false);
 
         game.map().setTime(1);

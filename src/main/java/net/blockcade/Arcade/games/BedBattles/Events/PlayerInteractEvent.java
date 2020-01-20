@@ -34,6 +34,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -79,7 +80,8 @@ public class PlayerInteractEvent implements Listener {
                     e.setUseInteractedBlock(Event.Result.DENY);
                     break;
                 case FIRE_CHARGE:
-                    e.getPlayer().launchProjectile(Fireball.class,e.getPlayer().getLocation().getDirection());
+                    Fireball source = e.getPlayer().launchProjectile(Fireball.class,e.getPlayer().getLocation().toVector());
+                    source.setDirection(e.getPlayer().getLocation().getDirection());
                     e.getItem().setAmount(e.getItem().getAmount()-1);
                     e.setUseItemInHand(Event.Result.DENY);
                     e.setUseInteractedBlock(Event.Result.DENY);
