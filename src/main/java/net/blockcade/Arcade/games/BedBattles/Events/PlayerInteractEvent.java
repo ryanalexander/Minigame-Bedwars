@@ -34,7 +34,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -80,7 +79,7 @@ public class PlayerInteractEvent implements Listener {
                     e.setUseInteractedBlock(Event.Result.DENY);
                     break;
                 case FIRE_CHARGE:
-                    Fireball source = e.getPlayer().launchProjectile(Fireball.class,e.getPlayer().getLocation().toVector());
+                    Fireball source = e.getPlayer().launchProjectile(Fireball.class,e.getPlayer().getLocation().add(1,0,1).getDirection());
                     source.setDirection(e.getPlayer().getLocation().getDirection());
                     e.getItem().setAmount(e.getItem().getAmount()-1);
                     e.setUseItemInHand(Event.Result.DENY);
@@ -92,8 +91,8 @@ public class PlayerInteractEvent implements Listener {
                         @Override
                         public void run() {
                             for(Entity entity: Objects.requireNonNull(silverfish.getLocation().getWorld()).getNearbyEntities(silverfish.getLocation(),2,2,2)){
-                                if(!(entity instanceof Player)){continue;}
-                                if(!game.TeamManager().getTeamPlayers(team).contains((Player)entity)){
+                                if(!(entity instanceof Player))continue;
+                                if(!game.TeamManager().getTeamPlayers(team).contains(entity)){
                                     silverfish.setTarget((LivingEntity) entity);
                                     return;
                                 }
@@ -184,7 +183,6 @@ public class PlayerInteractEvent implements Listener {
             ItemFrame frame = (ItemFrame)event.getRightClicked();
             frame.setRotation(Rotation.NONE);
             event.getPlayer().sendMessage(Text.format("&cSprays has been disabled. Now added to to-do"));
-            /*
             try {
                 String logo = "blockcade.png";
                 switch(event.getPlayer().getName().toLowerCase()){
@@ -195,12 +193,11 @@ public class PlayerInteractEvent implements Listener {
                         logo="frostystudios.png";
                         break;
                 }
-                frame.setItem(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.getMap(new URL("https://mc2.stelch.gg/assets/sprays/"+logo)));
+                //frame.setItem(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.getMap());
                 event.getPlayer().playSound(frame.getLocation(), Sound.ENTITY_SPIDER_AMBIENT,1f,1f);
             }catch (Exception e){
                 e.printStackTrace();;
             }
-            */
         }
     }
 

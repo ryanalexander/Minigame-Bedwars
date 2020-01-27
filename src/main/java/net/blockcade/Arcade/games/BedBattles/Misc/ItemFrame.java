@@ -19,12 +19,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
+import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,18 +34,15 @@ import java.net.URL;
 import static org.bukkit.Bukkit.getServer;
 
 public class ItemFrame {
-    public static ItemStack getMap(URL image){
+
+    String[] sprays = new String[]{
+            ""
+    };
+
+    public static ItemStack getMap(BufferedImage img){
         // Generate map ItemStack
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         // Fetch image from url
-        BufferedImage img;
-        try {
-            System.out.println("Loaded "+image);
-            img=(BufferedImage) getImageFromURL(image);
-        }catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
 
         MapView map = getServer().createMap(getServer().getWorlds().get(0));
         for(org.bukkit.map.MapRenderer r : map.getRenderers())
@@ -54,7 +53,7 @@ public class ItemFrame {
         mapItem.setItemMeta(meta);
         return mapItem;
     }
-    public static Image getImageFromURL(URL url) throws MalformedURLException{
+    public static Image getImageFromURL(URL url) {
         BufferedImage image = null;
 
         try {
@@ -65,6 +64,31 @@ public class ItemFrame {
         }
 
         return image;
+    }
+    public static BufferedImage getImageFromBase64(String base64){
+        BufferedImage image = null;
+        byte[] imageByte;
+        try {
+            BASE64Decoder decoder = new BASE64Decoder();
+            imageByte = decoder.decodeBuffer(base64.split(",")[1]);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        int w = img.getWidth();
+        int h = img.getHeight();
+        BufferedImage dimg = new BufferedImage(newW, newH, img.getType());
+        Graphics2D g = dimg.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(img, 0, 0, newW, newH, 0, 0, w, h, null);
+        g.dispose();
+        return dimg;
     }
 
     static class MapRenderer extends org.bukkit.map.MapRenderer {

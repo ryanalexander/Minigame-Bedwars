@@ -11,19 +11,6 @@
  * @since (DD/MM/YYYY) 18/1/2020
  */
 
-/*
- *
- *  *
- *  * © Stelch Software 2019, distribution is strictly prohibited
- *  * Blockcade is a company of Stelch Software
- *  *
- *  * Changes to this file must be documented on push.
- *  * Unauthorised changes to this file are prohibited.
- *  *
- *  * @author Ryan Wood
- *  @since 18/8/2019
- */
-
 package net.blockcade.Arcade.games.BedBattles.Inventories.Assets;
 
 import net.blockcade.Arcade.Game;
@@ -55,13 +42,8 @@ public class header {
 
         if (header) {
             net.blockcade.Arcade.Utils.Formatting.Item quick_buy = new net.blockcade.Arcade.Utils.Formatting.Item(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "&fQuick Buy");
-            quick_buy.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                @Override
-                public void run(Player p) {
-                    p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO,0.5f,0.5f);
-                }
-            });
-            quick_buy.setLore(new String[]{"&7To set this &bQuick Buy&7 slot","&7just &bShift + Click&7 and click","&7any item from the menu"});
+            quick_buy.setOnClick(p16 -> p16.playSound(p16.getLocation(), Sound.ENTITY_VILLAGER_NO,0.5f,0.5f));
+            quick_buy.setLore("&7To set this &bQuick Buy&7 slot","&7just &bShift + Click&7 and click","&7any item from the menu");
 
             net.blockcade.Arcade.Utils.Formatting.Item Blocks = new net.blockcade.Arcade.Utils.Formatting.Item(Material.OAK_PLANKS, "&6Blocks");
             net.blockcade.Arcade.Utils.Formatting.Item Weapons = new net.blockcade.Arcade.Utils.Formatting.Item(Material.DIAMOND_SWORD, "&6Weapons");
@@ -69,31 +51,11 @@ public class header {
             net.blockcade.Arcade.Utils.Formatting.Item Tools = new net.blockcade.Arcade.Utils.Formatting.Item(Material.GOLDEN_PICKAXE, "&6Tools");
             net.blockcade.Arcade.Utils.Formatting.Item Special = new net.blockcade.Arcade.Utils.Formatting.Item(Material.FIRE_CHARGE, "&6Specials");
 
-            Blocks.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                public void run(Player p) {
-                    p.openInventory(blocks.getShop(game, p));
-                }
-            });
-            Weapons.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                public void run(Player p) {
-                    p.openInventory(weapons.getShop(game, p));
-                }
-            });
-            Armor.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                public void run(Player p) {
-                    p.openInventory(armor.getShop(game, p));
-                }
-            });
-            Tools.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                public void run(Player p) {
-                    p.openInventory(tools.getShop(game, p));
-                }
-            });
-            Special.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-                public void run(Player p) {
-                    p.openInventory(specials.getShop(game, p));
-                }
-            });
+            Blocks.setOnClick(p1 -> p1.openInventory(blocks.getShop(game, p1)));
+            Weapons.setOnClick(p13 -> p13.openInventory(weapons.getShop(game, p13)));
+            Armor.setOnClick(p12 -> p12.openInventory(armor.getShop(game, p12)));
+            Tools.setOnClick(p14 -> p14.openInventory(tools.getShop(game, p14)));
+            Special.setOnClick(p15 -> p15.openInventory(specials.getShop(game, p15)));
 
             inv.setItem(offset+2, Blocks.spigot());
             inv.setItem(offset+3, Weapons.spigot());

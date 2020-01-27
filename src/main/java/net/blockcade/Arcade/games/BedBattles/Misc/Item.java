@@ -286,6 +286,12 @@ public enum Item {
             player.getInventory().addItem(new ItemStack(ENDER_CHEST, 1));
     }),
 
+    // Spawn Eggs
+    SPAWN_SILVERFISH(SILVERFISH_SPAWN_EGG, "&fLittle Soldier", new String[]{"&r","&7Cost: &f20 Iron"}, player -> {
+        if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(player, IRON_INGOT, 20))
+            player.getInventory().addItem(new ItemStack(SILVERFISH_SPAWN_EGG, 1));
+    }),
+
     // TODO Potions (Somehow)
 
     DISABLED(BARRIER,"&cItem Disabled",new String[]{"&r","&fThis is has been disabled","&fin some cases this may be","&ftemporary, or due to technical issues.","&r","&6Check again later."}, player -> {

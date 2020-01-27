@@ -68,6 +68,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades.AXE;
 import static net.blockcade.Arcade.games.BedBattles.Inventories.Assets.ItemUpgrades.PICKAXE;
@@ -91,18 +92,16 @@ public class tools implements Listener {
         shears.setLore("&r",
                 "&7Cost: &f20 Iron");
         shears.setAmount(1);
-        shears.setOnClick(new Item.click() {
-            public void run(Player p) {
-                if(p.getInventory().contains(SHEARS)){
-                    return;
-                }
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.IRON_INGOT, 20))
-                    p.getInventory().addItem(new ItemStack(Material.SHEARS, 1));
+        shears.setOnClick(p -> {
+            if(p.getInventory().contains(SHEARS)){
+                return;
             }
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, Material.IRON_INGOT, 20))
+                p.getInventory().addItem(new ItemStack(Material.SHEARS, 1));
         });
 
 
-        Item pickaxe = new Item(nextUpgrade(player, PICKAXE), "&bPickaxe");
+        Item pickaxe = new Item(Objects.requireNonNull(nextUpgrade(player, PICKAXE)), "&bPickaxe");
         ItemStack pickaxe_cost = getPrice(player, PICKAXE);
         pickaxe.setLore("&r",
                 "&7Cost: &f" + ((pickaxe_cost != null) ? pickaxe_cost.getAmount() + " " + pickaxe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded"));
@@ -125,7 +124,7 @@ public class tools implements Listener {
             }
         });
 
-        Item axe = new Item(nextUpgrade(player, AXE), "&bAXE");
+        Item axe = new Item(Objects.requireNonNull(nextUpgrade(player, AXE)), "&bAXE");
         ItemStack axe_cost = getPrice(player, AXE);
         axe.setLore("&r",
                 "&7Cost: &f" + ((axe_cost != null) ? axe_cost.getAmount() + " " + axe_cost.getType().name().replaceAll("_", " ").toLowerCase() : "&cFully Upgraded"));
@@ -135,6 +134,7 @@ public class tools implements Listener {
                 if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, axe_cost.getType(), axe_cost.getAmount())) {
                     Material last = currentUpgrade(p, AXE);
                     Material next = nextUpgrade(p, AXE);
+                    assert next != null;
                     ItemStack is = new ItemStack(next, 1);
                     is.addEnchantment(Enchantment.DIG_SPEED,1);
                     if(Main.teams.get(game.TeamManager().getTeam(p)).upgrades.getOrDefault(TeamUpgrades.SHARP_SWORD,0)>0) {

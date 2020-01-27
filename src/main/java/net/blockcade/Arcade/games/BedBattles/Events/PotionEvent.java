@@ -62,10 +62,9 @@ public class PotionEvent implements Listener {
                         if (counter / 20 > (invisible_time)) {
                             chatColor = '4';
                         }
-                        Text.sendMessage(player,"&eInvisible for &"+String.format("&eInvisible for &" + chatColor + "%s&as.", 30 - (counter / 20)), Text.MessageType.ACTION_BAR);
-                        if ((30 - (counter / 20)) <= 0 || (!invis_players.containsKey(player))) {
+                        Text.sendMessage(player,String.format("&eInvisible for &" + chatColor + "%s&as.", 30 - (counter / 20)), Text.MessageType.ACTION_BAR);
+                        if ((30 - (counter / 20)) <= 0 || (!invis_players.containsKey(player)))
                             cancel();
-                        }
                     }
                 }.runTaskTimer(Main.getPlugin(Main.class), 0, 1);
                 new BukkitRunnable() {

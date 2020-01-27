@@ -40,7 +40,7 @@ import net.blockcade.Arcade.games.BedBattles.Misc.BedPlayer;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
 import net.blockcade.Arcade.games.BedBattles.Misc.SpinningBlock;
-import net.blockcade.Arcade.games.BedBattles.Variables.GameUpgrades;
+import net.blockcade.Arcade.games.BedBattles.Variables.GameStages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -70,6 +70,7 @@ public class GameStartEvent implements Listener {
 
     @EventHandler
     public void GameStartEvent(net.blockcade.Arcade.Managers.EventManager.GameStartEvent e) {
+        game.BlockManager().loadBlockedRegion();
 
         for(Player player : Bukkit.getOnlinePlayers()){
             // Register BedPlayer object (Also creates GamePlayer)
@@ -78,12 +79,7 @@ public class GameStartEvent implements Listener {
             // Scoreboard //
             ScoreboardManager sm = new ScoreboardManager("G" + player.getName(), game);
             sm.setGamePlayer(bPlayer);
-            sm.registerPlaceholder(new ScoreboardManager.placeholder() {
-                @Override
-                public String String(GamePlayer player) {
-                    return ""+BedPlayer.getBedPlayer(player).getBedDestroys();
-                }
-            },":BED_DESTROYS:");
+            sm.registerPlaceholder(player1 -> ""+BedPlayer.getBedPlayer(player1).getBedDestroys(),":BED_DESTROYS:");
             sm.enableHealthCounter();
             String name = "  BedBattles  ";
             sm.setDisplayname(name);
@@ -129,7 +125,7 @@ public class GameStartEvent implements Listener {
             // Spawn team shop
             Location tshoploc = game.TeamManager().getConfigLocation("team_shop", team);
             LivingEntity _tshop = (LivingEntity) tshoploc.getWorld().spawnEntity(tshoploc, EntityType.VILLAGER);
-            _tshop.setCustomName(Text.format("Team shop"));
+            _tshop.setCustomName(Text.format("Team Shop"));
             _tshop.setCustomNameVisible(true);
             _tshop.setInvulnerable(true);
             _tshop.setAI(false);
@@ -205,7 +201,7 @@ public class GameStartEvent implements Listener {
         }
 
         new BukkitRunnable(){
-            int level = 6;
+            int level = 0;
             long timer = 0;
             @Override
             public void run() {
@@ -224,22 +220,22 @@ public class GameStartEvent implements Listener {
                         }
                     }
                 }
-                if(level>=GameUpgrades.events.length)return;
-                if(timer>=GameUpgrades.events[level].getTime()){
-                    GameUpgrades.events[level].run();
+                if(level>= GameStages.events.length)return;
+                if(timer>= GameStages.events[level].getTime()){
+                    GameStages.events[level].run();
                     level++;
                     timer=1;
                 }else {
                     for(Map.Entry<ScoreboardManager, Integer> payload : scoreboard_upgrade_offsets.entrySet()){
                         ScoreboardManager sm = payload.getKey();
-                        long i = ((GameUpgrades.events[level].getTime()-timer)/20)*1000;
+                        long i = ((GameStages.events[level].getTime()-timer)/20)*1000;
                         long SECONDS = JavaUtils.FormatMS(i, JavaUtils.TimeUnit.SECOND);
                         long MINUTES = Math.round(SECONDS/60);
                         SECONDS=(SECONDS-((MINUTES)*60));
                         String SECONDS_FORMATTED = (SECONDS<=9?"0":"")+SECONDS;
                         String MINUTES_FORMATTED = (MINUTES<=9?"0":"")+MINUTES;
 
-                        sm.editLine(payload.getValue()+1,GameUpgrades.events[level].getName());
+                        sm.editLine(payload.getValue()+1, GameStages.events[level].getName());
                         sm.editLine(payload.getValue(),String.format("&e%s:&e%s",MINUTES_FORMATTED,SECONDS_FORMATTED));
 
                     }

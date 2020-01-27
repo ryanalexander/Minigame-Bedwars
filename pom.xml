@@ -19,7 +19,8 @@
 
     <groupId>net.blockcade</groupId>
     <artifactId>BedBattles</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.7-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <artifactId>${project.name}</artifactId>
@@ -96,12 +97,10 @@
             <artifactId>jedis</artifactId>
             <version>3.1.0</version>
         </dependency>
-
-        <!-- Arcade core -->
         <dependency>
             <groupId>net.blockcade</groupId>
             <artifactId>Arcade</artifactId>
-            <version>1.0.5-SNAPSHOT</version>
+            <version>1.0.6-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

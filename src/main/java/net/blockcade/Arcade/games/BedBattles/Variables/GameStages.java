@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
 
-public class GameUpgrades {
+public class GameStages {
 
     public static Event[] events = new Event[]{
             new Event("&b&lDiamond &bII", 3600,0,()->{
@@ -66,7 +66,7 @@ public class GameUpgrades {
                     if(bed.getType().name().contains("BED")) {
                         Bed blockData = (Bed) bed.getBlockData();
                         org.bukkit.block.Block relative = bed.getRelative(blockData.getFacing());
-                        bed.setType(Material.AIR);
+                        bed.setType(Material.AIR,false);
                         relative.setType(Material.AIR, false);
                         Main.game.TeamManager().setCantRespawn(payload.getValue().getTeam(), true);
                         for (Player player : Main.game.TeamManager().getTeamPlayers(payload.getValue().getTeam())) {

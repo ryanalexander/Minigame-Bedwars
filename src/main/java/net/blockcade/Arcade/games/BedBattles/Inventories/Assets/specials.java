@@ -86,26 +86,22 @@ public class specials implements Listener {
         invisMeta.setBasePotionData(new PotionData(PotionType.INSTANT_DAMAGE));
         invisIS.setItemMeta(invisMeta);
         net.blockcade.Arcade.Utils.Formatting.Item invis = new net.blockcade.Arcade.Utils.Formatting.Item(invisIS, "&bInvisibility Potion");
-        invis.setLore(new String[]{
-                "&r",
+        invis.setLore("&r",
                 "&7Cost: &a2 Emeralds",
                 "&r",
-                "&7Duration: &f30 Secs"
-        });
+                "&7Duration: &f30 Secs");
         invis.setAmount(1);
-        invis.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-            public void run(Player p) {
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 2)) {
-                    ItemStack potion = new ItemStack(Material.POTION, 1);
+        invis.setOnClick(p -> {
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 2)) {
+                ItemStack potion = new ItemStack(Material.POTION, 1);
 
-                    PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
-                    potionmeta.setMainEffect(PotionEffectType.INVISIBILITY);
-                    PotionEffect speed = new PotionEffect(PotionEffectType.INVISIBILITY, (30 * 20), 1);
-                    potionmeta.addCustomEffect(speed, true);
-                    potionmeta.setDisplayName(Text.format("&bInvisibility Potion"));
-                    potion.setItemMeta(potionmeta);
-                    p.getInventory().addItem(potion);
-                }
+                PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
+                potionmeta.setMainEffect(PotionEffectType.INVISIBILITY);
+                PotionEffect speed = new PotionEffect(PotionEffectType.INVISIBILITY, (30 * 20), 1);
+                potionmeta.addCustomEffect(speed, true);
+                potionmeta.setDisplayName(Text.format("&bInvisibility Potion"));
+                potion.setItemMeta(potionmeta);
+                p.getInventory().addItem(potion);
             }
         });
         ItemStack jumpIS = new ItemStack(POTION);
@@ -114,27 +110,23 @@ public class specials implements Listener {
         jumpMeta.setBasePotionData(new PotionData(PotionType.JUMP));
         jumpIS.setItemMeta(jumpMeta);
         net.blockcade.Arcade.Utils.Formatting.Item jump = new net.blockcade.Arcade.Utils.Formatting.Item(jumpIS, "&bJump Juice");
-        jump.setLore(new String[]{
-                "&r",
+        jump.setLore("&r",
                 "&7Cost: &a1 Emerald",
                 "&r",
-                "&7Duration: &f30 Secs"
-        });
+                "&7Duration: &f30 Secs");
         jump.setAmount(1);
-        jump.setOnClick(new net.blockcade.Arcade.Utils.Formatting.Item.click() {
-            public void run(Player p) {
-                if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 1)) {
-                    ItemStack potion = new ItemStack(Material.POTION, 1);
+        jump.setOnClick(p -> {
+            if (net.blockcade.Arcade.games.BedBattles.Inventories.shop.doCharge(p, EMERALD, 1)) {
+                ItemStack potion = new ItemStack(Material.POTION, 1);
 
-                    PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
-                    potionmeta.setMainEffect(PotionEffectType.JUMP);
-                    PotionEffect speed = new PotionEffect(PotionEffectType.JUMP, (30 * 20), 3);
-                    potionmeta.addCustomEffect(speed, true);
-                    potionmeta.setColor(Color.LIME);
-                    potionmeta.setDisplayName(Text.format("&bJump Juice"));
-                    potion.setItemMeta(potionmeta);
-                    p.getInventory().addItem(potion);
-                }
+                PotionMeta potionmeta = (PotionMeta) potion.getItemMeta();
+                potionmeta.setMainEffect(PotionEffectType.JUMP);
+                PotionEffect speed = new PotionEffect(PotionEffectType.JUMP, (30 * 20), 3);
+                potionmeta.addCustomEffect(speed, true);
+                potionmeta.setColor(Color.LIME);
+                potionmeta.setDisplayName(Text.format("&bJump Juice"));
+                potion.setItemMeta(potionmeta);
+                p.getInventory().addItem(potion);
             }
         });
 
@@ -191,7 +183,7 @@ public class specials implements Listener {
         /*  3 - 2 */ specials.shop.setItem(19, Item.SPECIAL_TNT.spigot());
         /*  3 - 3 */ specials.shop.setItem(20, Item.SPECIAL_ENDER_PEARL.spigot());
 
-        /*  3 - 5 */ specials.shop.setItem(22,disabled.spigot()); // SPAWN EGG
+        /*  3 - 5 */ specials.shop.setItem(22,Item.SPAWN_SILVERFISH.spigot()); // SILVERFISH
 
         /*  3 - 7 */ specials.shop.setItem(24,speed.spigot()); // POTION OF SPEED
         /*  3 - 8 */ specials.shop.setItem(25,milk.spigot()); // Magic Milk
@@ -200,7 +192,7 @@ public class specials implements Listener {
         /*  4 - 2 */ specials.shop.setItem(28, Item.SPECIAL_WATER.spigot());
         /*  4 - 3 */ specials.shop.setItem(29, Item.SPECIAL_FIREBALL.spigot());
 
-        /*  4 - 5 */ specials.shop.setItem(31,disabled.spigot()); // SPAWN EGG
+        /*  4 - 5 */ specials.shop.setItem(31,Item.DISABLED.spigot()); // SPAWN EGG
 
         /*  4 - 7 */ specials.shop.setItem(33,jump.spigot()); // POTION OF LEAPING
         /*  4 - 8 */ specials.shop.setItem(34, Item.SPECIAL_GOLDEN_APPLE.spigot());
@@ -209,7 +201,7 @@ public class specials implements Listener {
         /*  5 - 2 */ specials.shop.setItem(37, Item.SPECIAL_ENDER_CHEST.spigot());
         /*  5 - 3 */ specials.shop.setItem(38, Item.SPECIAL_BRIDGE_EGG.spigot());
 
-        /*  5 - 5 */ specials.shop.setItem(40,disabled.spigot()); //SPAWN EGG
+        /*  5 - 5 */ specials.shop.setItem(40,Item.DISABLED.spigot()); //SPAWN EGG
 
         /*  5 - 7 */ specials.shop.setItem(42,invis.spigot()); // PORTION OF INVISIBILITY
         /*  X - Y */

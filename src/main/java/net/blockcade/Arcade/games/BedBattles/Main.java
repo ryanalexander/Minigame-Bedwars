@@ -51,7 +51,7 @@ public class Main extends JavaPlugin {
     public static HashMap<Player,Integer> camping = new HashMap<>();
 
     @Override
-    public void onEnable() {;
+    public void onEnable() {
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
