@@ -177,23 +177,12 @@ public class PlayerInteractEvent implements Listener {
 
     @EventHandler
     public void onRightClick(PlayerInteractEntityEvent event){
-        event.getPlayer().getInventory().getItemInMainHand().setDurability((short)0);
         event.setCancelled(true);
         if(event.getRightClicked() instanceof ItemFrame){
             ItemFrame frame = (ItemFrame)event.getRightClicked();
             frame.setRotation(Rotation.NONE);
-            event.getPlayer().sendMessage(Text.format("&cSprays has been disabled. Now added to to-do"));
             try {
-                String logo = "blockcade.png";
-                switch(event.getPlayer().getName().toLowerCase()){
-                    case "aspytheaussie":
-                        logo="stelch.png";
-                        break;
-                    case "imservs":
-                        logo="frostystudios.png";
-                        break;
-                }
-                //frame.setItem(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.getMap());
+                frame.setItem(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.getMap(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.getImageFromBase64(net.blockcade.Arcade.games.BedBattles.Misc.ItemFrame.sprays[0].split("[,]")[1])));
                 event.getPlayer().playSound(frame.getLocation(), Sound.ENTITY_SPIDER_AMBIENT,1f,1f);
             }catch (Exception e){
                 e.printStackTrace();;

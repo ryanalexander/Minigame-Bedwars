@@ -25,6 +25,7 @@ import net.blockcade.Arcade.games.BedBattles.Events.*;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -52,7 +53,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Game game = new Game("BedBattles", GameType.DESTROY, 8, 16, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
+        Game game = new Game("BedBattles", GameType.DESTROY, 8, 8, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
         net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class).getCommand("debug").setExecutor(new debug(game));
@@ -94,6 +95,9 @@ public class Main extends JavaPlugin {
 
         game.map().setTime(1);
         game.map().setWeatherDuration(0);
+
+        game.map().setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);
+        game.map().setGameRule(GameRule.DO_WEATHER_CYCLE,false);
 
         new BukkitRunnable() {
             @Override
