@@ -14,13 +14,13 @@
 
 package net.blockcade.Arcade.games.BedBattles;
 
-import jdk.nashorn.internal.ir.debug.JSONWriter;
 import net.blockcade.Arcade.Commands.GameCommand;
-import net.blockcade.Arcade.Commands.debug;
+import net.blockcade.Arcade.Commands.DebugCommand;
 import net.blockcade.Arcade.Game;
 import net.blockcade.Arcade.Managers.GamePlayer;
 import net.blockcade.Arcade.Managers.ScoreboardManager;
 import net.blockcade.Arcade.Varables.*;
+import net.blockcade.Arcade.games.BedBattles.Advancements.BedBreakAchievement;
 import net.blockcade.Arcade.games.BedBattles.Events.*;
 import net.blockcade.Arcade.games.BedBattles.Misc.BedTeam;
 import net.blockcade.Arcade.games.BedBattles.Misc.Forge;
@@ -33,7 +33,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +55,7 @@ public class Main extends JavaPlugin {
         Game game = new Game("BedBattles", GameType.DESTROY, 8, 8, net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class), Bukkit.getWorld("world"));
         game.TeamManager().setMaxTeams(8);
         getCommand("game").setExecutor(new GameCommand(this, game));
-        net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class).getCommand("debug").setExecutor(new debug(game));
+        net.blockcade.Arcade.Main.getPlugin(net.blockcade.Arcade.Main.class).getCommand("debug").setExecutor(new DebugCommand(game));
         game.setMaxDamageHeight(512);
         game.setGameName(GameName.BEDBATTLES);
         Main.game=game;
@@ -85,6 +84,7 @@ public class Main extends JavaPlugin {
         game.setModule(GameModule.NO_TOOL_DROP,true);
         game.setModule(GameModule.START_MECHANISM,true);
         game.setModule(GameModule.TEAMS,true);
+        game.setModule(GameModule.ACHIEVEMENTS,true);
         game.setModule(GameModule.CHAT_MANAGER,true);
         game.setModule(GameModule.NO_WEATHER_CHANGE,true);
         game.setModule(GameModule.INFINITE_BUILDING,false);
@@ -98,6 +98,9 @@ public class Main extends JavaPlugin {
 
         game.map().setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);
         game.map().setGameRule(GameRule.DO_WEATHER_CYCLE,false);
+
+        // Register Achievements
+        game.AchievementManager().registerAdvancement(new BedBreakAchievement());
 
         new BukkitRunnable() {
             @Override
