@@ -176,11 +176,11 @@ public class specials implements Listener {
         });
 
         net.blockcade.Arcade.Utils.Formatting.Item disabled = new net.blockcade.Arcade.Utils.Formatting.Item(BARRIER, "&cItem Disabled");
-        disabled.setLore(new String[]{"&r","&fThis is has been disabled","&fin some cases this may be","&ftemporary, or due to technical issues.","&r","&6Check again later."});
+        disabled.setLore("&r","&fThis is has been disabled","&fin some cases this may be","&ftemporary, or due to technical issues.","&r","&6Check again later.");
         disabled.setOnClick((Player p)->player.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO,1f,1f));
 
         /*  X - Y */
-        /*  3 - 2 */ specials.shop.setItem(19, Item.SPECIAL_TNT.spigot());
+        /*  3 - 2 */ specials.shop.setItem(19, Item.DISABLED.spigot()); // TNT
         /*  3 - 3 */ specials.shop.setItem(20, Item.SPECIAL_ENDER_PEARL.spigot());
 
         /*  3 - 5 */ specials.shop.setItem(22,Item.SPAWN_SILVERFISH.spigot()); // SILVERFISH
